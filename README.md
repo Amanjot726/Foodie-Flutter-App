@@ -2,11 +2,7 @@
 
 Flutter is an open-source UI software development kit created by Google. It is used to develop cross platform applications for Android, iOS, Linux, Mac, Windows, Google Fuchsia, and the web from a single codebase.
 
-# Practice Flutter app
-
-A new Flutter project.
-
-## Getting Started
+## Getting Started:
 
 This project is a starting point for a Flutter application.
 
