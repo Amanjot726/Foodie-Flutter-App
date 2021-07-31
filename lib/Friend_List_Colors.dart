@@ -48,8 +48,8 @@ class Change extends StatefulWidget {
 class _ChangeState extends State<Change> {
   var mydefaultcolors1 = <String,List>{
     'Hargun' : ['Orange',Colors.orange],
-    'Ishpreet' : ['Pink',Colors.pink],
-    'Jashan' : ['Deep Purple',Colors.deepPurple],
+    'Priyanka' : ['Pink',Colors.pink],
+    'Vrishti' : ['Deep Purple',Colors.deepPurple],
     'Harsh' : ['Cyan',Colors.cyan],
   };
   var mydefaultcolors2 = <String,List>{
