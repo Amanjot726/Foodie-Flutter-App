@@ -50,13 +50,13 @@ class _ChangeState extends State<Change> {
     'Hargun' : ['Orange',Colors.orange],
     'Ishpreet' : ['Pink',Colors.pink],
     'Jashan' : ['Deep Purple',Colors.deepPurple],
-    'Harsh' : ['Deep Purple',Colors.cyan],
+    'Harsh' : ['Cyan',Colors.cyan],
   };
   var mydefaultcolors2 = <String,List>{
-    'Chatter' : ['Orange',Colors.greenAccent],
-    'Ishpreet' : ['Pink',Colors.lime],
-    'divyanshu' : ['Deep Purple',Colors.deepPurple],
-    'Jashan' : ['Deep Purple',Colors.grey],
+    'Divyanshu' : ['Indigo',Colors.indigo],
+    'Chatter' : ['Green Accent',Colors.greenAccent],
+    'Ishpreet' : ['Lime',Colors.lime],
+    'Jashan' : ['Grey',Colors.grey],
   };
 
 
