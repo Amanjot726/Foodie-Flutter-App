@@ -84,8 +84,8 @@ class _ChangeState extends State<Change> {
                           children: [
                             Container(
                               height: 75,
-                              width: 200,
-                              child: Text("\n   "+key+":\n"+" "*25+value[0],style: TextStyle(color: Colors.teal,fontSize: 16,fontWeight: FontWeight.w700),),
+                              width: 120,
+                              child: Text("\n "+key+":\n"+" "*10+value[0],style: TextStyle(color: Colors.teal,fontSize: 16,fontWeight: FontWeight.w700),),
                             )
 
                           ]
@@ -140,7 +140,7 @@ class _ChangeState extends State<Change> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Column(
-                            children: [SizedBox(width: size.width/64)]
+                            children: [SizedBox(width: size.width/84)]
                         ),
                         Column(
                             children: getcolors(1)
@@ -152,7 +152,7 @@ class _ChangeState extends State<Change> {
                             children: getcolors(2)
                         ),
                         Column(
-                            children: [SizedBox(width: size.width/64)]
+                            children: [SizedBox(width: size.width/84)]
                         ),
                       ]
                   )
