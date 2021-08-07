@@ -1,7 +1,11 @@
 // import 'package:first_app/News_api.dart';
+// import 'package:first_app/News_api.dart';
 import 'package:first_app/News_api_Listview.dart';
 import 'package:first_app/Listview.dart';
 import 'package:flutter/material.dart';
+import 'package:first_app/profile_page.dart';
+import 'package:first_app/Home/splash-page.dart';
+import 'package:first_app/Home/home-page.dart';
 
 void main() {
   runApp(MyApp());
@@ -26,35 +30,40 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      routes: {
+        "/": (context) => SplashPage(),
+        "/home": (context) => HomePage(),
+      },
+      initialRoute: "/",
     );
   }
 }
 
-class HomePage extends StatelessWidget {
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("News"),
-        backgroundColor: Colors.green,
-        actions: [
-          PopupMenuButton(
-            itemBuilder: (context)=>[
-              PopupMenuItem(
-                child: Text("Item 1"),
-                value: 1,
-              ),
-              PopupMenuItem(
-                child: Text("Item 2"),
-                value: 2,
-              ),
-            ],
-          ),
-        ],
-      ),
-      body: NewsPage(),
-    );
-  }
-}
+// class HomePage extends StatelessWidget {
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Color.fromARGB(235, 220, 245, 234),
+//       // appBar: AppBar(
+//       //   title: Text("News"),
+//       //   backgroundColor: Colors.green,
+//       //   actions: [
+//       //     PopupMenuButton(
+//       //       itemBuilder: (context)=>[
+//       //         PopupMenuItem(
+//       //           child: Text("Item 1"),
+//       //           value: 1,
+//       //         ),
+//       //         PopupMenuItem(
+//       //           child: Text("Item 2"),
+//       //           value: 2,
+//       //         ),
+//       //       ],
+//       //     ),
+//       //   ],
+//       // ),
+//       body: SplashPage(),
+//     );
+//   }
+// }

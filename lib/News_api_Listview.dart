@@ -7,7 +7,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 Future<String> fetchnews() async{
   String apikey = '24c5a60e9a924705938d1cac2101590f';
-  String url = "https://newsapi.org/v2/top-headlines?country=us&apiKey="+apikey;
+  String url = "https://newsapi.org/v2/top-headlines?country=in&apiKey="+apikey;
 
   var response = await http.get(Uri.parse(url));
   if (response.statusCode == 200) {
@@ -52,17 +52,20 @@ class NewsPage extends StatelessWidget {
                       )
                   )
                       :
-                  Container(
-                    height: 200,
-                    width: 350,
-                    color: Colors.black12,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(Icons.image_not_supported_outlined),
-                        Text("No Image Found..."),],
-                    )
+                  ClipRRect(
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
+                  child: Container(
+                      height: 200,
+                      width: 350,
+                      color: Colors.black12,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(Icons.image_not_supported_outlined),
+                          Text("No Image Found..."),],
+                      )
+                    ),
                   ),
 
                   ListTile(
@@ -139,6 +142,7 @@ class _WebViewPageState extends State<WebViewPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("News"),
+        backgroundColor: Colors.green,
       ),
       body: WebView(
         initialUrl: widget.url,
