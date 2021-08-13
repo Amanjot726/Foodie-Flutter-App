@@ -21,7 +21,7 @@ Future<String> fetchnews() async{
 class NewsPage extends StatelessWidget {
 
   Design_News(context,String articles){
-    print(articles);
+    // print(articles);
     var jsonResponse = convert.jsonDecode(articles);
     var Articles = jsonResponse['articles'];
 
@@ -36,6 +36,7 @@ class NewsPage extends StatelessWidget {
               border: Border.all(color: Color.fromARGB(15, 0, 0, 0),width: 2),
             ),
             child: InkWell(
+              borderRadius: BorderRadius.circular(9),
               child: Column(
                 children: [
                   element["urlToImage"] != null ?
