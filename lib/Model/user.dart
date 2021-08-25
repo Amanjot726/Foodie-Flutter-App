@@ -3,13 +3,15 @@ class AppUser{
   String? uid;
   String? name;
   String? email;
+  String? Profile_pic;
+  bool? isAdmin;
 
-  AppUser({this.uid, this.name, this.email});
+  AppUser({this.uid, this.name, this.email, this.Profile_pic, this.isAdmin});
 
-  // it will be executed whenever we will print reference of User Object
+
   @override
   String toString() {
-    return 'User{uid: $uid, name: $name, email: $email}';
+    return 'NewUser{uid: $uid, name: $name, email: $email, profile_pic: $Profile_pic}';
   }
 
   Map<String, dynamic> toMap(){
@@ -17,6 +19,7 @@ class AppUser{
       "uid": uid,
       "name": name,
       "email": email,
+      "profile_pic": Profile_pic,
     };
 
   }

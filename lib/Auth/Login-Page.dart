@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first_app/util/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -9,6 +10,7 @@ FocusNode _Password_focus_node = new FocusNode();
 FocusNode _Button_focus_node = new FocusNode();
 TextEditingController loginIDController = new TextEditingController();
 TextEditingController PasswordController = new TextEditingController();
+bool progressIndicator = false;
 
 class Show_Snackbar{
   String message;
@@ -41,8 +43,27 @@ class _LoginPageState extends State<LoginPage> {
       print("User ID is:"+userCredential.user!.uid.toString());
 
       if(userCredential.user!.uid.toString().isNotEmpty){
-        Navigator.pushReplacementNamed(context, "/home");
+        await get_data();
+        setState(() {
+          loginIDController.text = "";
+          PasswordController.text = "";
+          _FormKey.currentState!.reset();
+        });
+        Future.delayed(
+          Duration(milliseconds: 500), (){
+          Navigator.pushReplacementNamed(context, "/Restaurant_home");
+          setState(() {
+            progressIndicator = false;
+          });
+          }
+        );
       }else{
+        setState(() {
+          loginIDController.text = "";
+          PasswordController.text = "";
+          _FormKey.currentState!.reset();
+          progressIndicator = false;
+        });
         Show_Snackbar(context: context,message: "Login Failed");
       }
 
@@ -61,6 +82,12 @@ class _LoginPageState extends State<LoginPage> {
         print('Failed with error code: ${e.code}');
         Show_Snackbar(context: context,message: e.code.toString());
       }
+      setState(() {
+        loginIDController.text = "";
+        PasswordController.text = "";
+        _FormKey.currentState!.reset();
+        progressIndicator = false;
+      });
     }
   }
 
@@ -125,7 +152,12 @@ class _LoginPageState extends State<LoginPage> {
               ],
             ),
             SizedBox(
-              height: 200,
+              // 640 --> redmi 2
+              // 872 --> redmi note 9 pro
+              height: (MediaQuery.of(context).size.height<680) ?
+                          MediaQuery.of(context).size.height/2-((MediaQuery.of(context).size.height/2)/1.55)
+                            :
+                          MediaQuery.of(context).size.height/2-((MediaQuery.of(context).size.height/2)/1.8),
               width: MediaQuery.of(context).size.width,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -144,173 +176,191 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
-            Align(
-              alignment: Alignment.center,
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                elevation: 20,
-                semanticContainer: false,
-                // margin: EdgeInsets.symmetric(horizontal: card_horizontal_margin,vertical: card_vertical_margin),
-                child: SingleChildScrollView(
-                  child: Container(
-                    // height: MediaQuery.of(context).size.height/2.5,
-                    width: MediaQuery.of(context).size.width/1.2,
-                    padding: EdgeInsets.all(20),
-                    child: Form(
-                      key: _FormKey,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(height: 8,),
-                          TextFormField(
-                            onTap: (){
-                              setState(() {
-                                _Password_focus_node.unfocus();
-                                FocusScope.of(context).requestFocus(_Email_focus_node);
-                              });
-                            },
-                            focusNode: _Email_focus_node,
-                            controller: loginIDController,
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                            enabled: true,
-                            autofocus: false,
-                            keyboardType: TextInputType.emailAddress,
-                            cursorColor: Colors.green,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Login ID is required. Please Enter.';
-                              } else if (value.trim().length == 0) {
-                                return 'Login ID is required. Please Enter.';
-                              }
-                              return null;
-                            },
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.blueGrey
-                            ),
-                            decoration: InputDecoration(
-                              // filled: true,
-                              // alignLabelWithHint: true,
-                              labelText: "Email ID",
-                              labelStyle: TextStyle(
-                                fontWeight: _Email_focus_node.hasFocus ? FontWeight.bold : FontWeight.normal,
-                                // color: _Email_focus_node.hasFocus ? Color.fromARGB(243, 93, 177, 108) : Colors.black54
-                                  // color: Colors.grey
-                              ),
-                              hintText: 'john@example.com',
-                              hintStyle: TextStyle(
-                                color: Colors.grey
-                              ),
-                              isDense: true,
-                              prefixIcon: Icon(Icons.email,size: 22,color: _Email_focus_node.hasFocus ? Color.fromARGB(243, 93, 177, 108) : Colors.black45),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  gapPadding: 4,
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(
-                                  color: Color.fromARGB(235, 60, 191, 84),
-                                  width: 1.5
-                                )
-                              )
-                            ),
-
-                          ),
-                          SizedBox(height: 12,),
-                          Custom_TextField(),
-                          SizedBox(height: 20,),
-                          InkWell(
-                              focusNode: _Button_focus_node,
-                              borderRadius: BorderRadius.circular(10),
-                              onTap: (){
-                                _Password_focus_node.unfocus();
-                                _Email_focus_node.unfocus();
-                                FocusScope.of(context).requestFocus(_Button_focus_node);
-                                if (_FormKey.currentState!.validate()) {
-                                  authenticateUser(context);
-                                }
-                              },
-                              enableFeedback: true,
-                              canRequestFocus: true,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 30,vertical: 11),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  // color: Color.fromARGB(97, 32, 194, 53)
-                                  color: Color.fromARGB(107, 0, 208, 38),
-                                  border: Border.all(color: Colors.black38),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Color.fromARGB(97, 29, 144, 58),
-                                        blurRadius: 8.0,
-                                        spreadRadius: 3.0,
-                                      ),
-                                    ]
+            SafeArea(
+              child: Align(
+                alignment: Alignment.center,
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  elevation: 20,
+                  semanticContainer: false,
+                  // margin: EdgeInsets.symmetric(horizontal: card_horizontal_margin,vertical: card_vertical_margin),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: SingleChildScrollView(
+                      child: Container(
+                        // height: MediaQuery.of(context).size.height/2.5,
+                        width: MediaQuery.of(context).size.width/1.2,
+                        padding: EdgeInsets.all(20),
+                        child: Form(
+                          key: _FormKey,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(height: 8,),
+                              TextFormField(
+                                onTap: (){
+                                  setState(() {
+                                    _Password_focus_node.unfocus();
+                                    FocusScope.of(context).requestFocus(_Email_focus_node);
+                                  });
+                                },
+                                focusNode: _Email_focus_node,
+                                controller: loginIDController,
+                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                enabled: true,
+                                autofocus: false,
+                                keyboardType: TextInputType.emailAddress,
+                                cursorColor: Colors.green,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'Login ID is required. Please Enter.';
+                                  } else if (value.trim().length == 0) {
+                                    return 'Login ID is required. Please Enter.';
+                                  }
+                                  return null;
+                                },
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.blueGrey
                                 ),
-                                child: Text("Login",style: TextStyle(color: Colors.black45,fontWeight: FontWeight.bold,fontSize: 15),),
+                                decoration: InputDecoration(
+                                  // filled: true,
+                                  // alignLabelWithHint: true,
+                                  labelText: "Email ID",
+                                  labelStyle: TextStyle(
+                                    fontWeight: _Email_focus_node.hasFocus ? FontWeight.bold : FontWeight.normal,
+                                    // color: _Email_focus_node.hasFocus ? Color.fromARGB(243, 93, 177, 108) : Colors.black54
+                                      // color: Colors.grey
+                                  ),
+                                  hintText: 'john@example.com',
+                                  hintStyle: TextStyle(
+                                    color: Colors.grey
+                                  ),
+                                  isDense: true,
+                                  prefixIcon: Icon(Icons.email,size: 22,color: _Email_focus_node.hasFocus ? Color.fromARGB(243, 93, 177, 108) : Colors.black45),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      gapPadding: 4,
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: BorderSide(
+                                      color: Color.fromARGB(235, 60, 191, 84),
+                                      width: 1.5
+                                    )
+                                  )
+                                ),
+
+                              ),
+                              SizedBox(height: 12,),
+                              Custom_TextField(),
+                              SizedBox(height: 20,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  progressIndicator==true?
+                                  CircularProgressIndicator()
+                                      :
+                                  InkWell(
+                                      focusNode: _Button_focus_node,
+                                      borderRadius: BorderRadius.circular(10),
+                                      onTap: (){
+                                        // Show_Snackbar(context: context, message: "Height = "+MediaQuery.of(context).size.height.toString());
+                                        _Password_focus_node.unfocus();
+                                        _Email_focus_node.unfocus();
+                                        FocusScope.of(context).requestFocus(_Button_focus_node);
+                                        if (_FormKey.currentState!.validate()) {
+                                          setState(() {
+                                            progressIndicator = true;
+                                          });
+                                          authenticateUser(context);
+                                        }
+                                      },
+                                      enableFeedback: true,
+                                      canRequestFocus: true,
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 30,vertical: 11),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10),
+                                            // color: Color.fromARGB(97, 32, 194, 53)
+                                            color: Color.fromARGB(107, 0, 208, 38),
+                                            border: Border.all(color: Colors.black38),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Color.fromARGB(97, 29, 144, 58),
+                                                blurRadius: 8.0,
+                                                spreadRadius: 3.0,
+                                              ),
+                                            ]
+                                        ),
+                                        child: Text("Login",style: TextStyle(color: Colors.black45,fontWeight: FontWeight.bold,fontSize: 15),),
+                                      )
+                                  ),
+                                ],
+                              ),
+
+                              SizedBox(height: 14),
+                              Text("By Logging in You accept our Terms & Conditions", style: TextStyle(
+                                  fontSize: 12.0, color: Colors.grey, fontWeight: FontWeight.w300),
+                                textAlign: TextAlign.center,),
+                              SizedBox(height: 10),
+                              InkWell(
+                                onTap: (){
+                                  // open the webview for privacy
+                                },
+                                child: Text(
+                                  'Privacy Policy',
+                                  style: TextStyle(
+                                      fontSize: 14.0, color: Colors.orange, fontWeight: FontWeight.w300, decoration: TextDecoration.underline),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              SizedBox(height: 8),
+                              InkWell(
+                                onTap: (){
+                                  // open the webview for terms and conditions
+                                },
+                                child: Text(
+                                  'Terms & Conditions',
+                                  style: TextStyle(
+                                    fontSize: 14.0, color: Colors.orange, fontWeight: FontWeight.w300, decoration: TextDecoration.underline,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              InkWell(
+                                onTap: (){
+                                  Navigator.pushReplacementNamed(context, "/register");
+                                },
+                                child: Text(
+                                  'New User? Register Here',
+                                  style: TextStyle(
+                                    fontSize: 18.0, color: Colors.green, fontWeight: FontWeight.w500,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
                               )
+                              // ElevatedButton(
+                              //     style: ButtonStyle(
+                              //       backgroundColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
+                              //       elevation: MaterialStateProperty.all(10),
+                              //       enableFeedback: true,
+                              //       padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 30,vertical: 10)),
+                              //     ),
+                              //     onPressed: (){},
+                              //     child: Text("Login",
+                              //       style: TextStyle(
+                              //         fontSize: 16.5
+                              //       ),
+                              //     )
+                              // )
+                            ],
                           ),
-                          SizedBox(height: 14),
-                          Text("By Logging in You accept our Terms & Conditions", style: TextStyle(
-                              fontSize: 12.0, color: Colors.grey, fontWeight: FontWeight.w300),
-                            textAlign: TextAlign.center,),
-                          SizedBox(height: 10),
-                          InkWell(
-                            onTap: (){
-                              // open the webview for privacy
-                            },
-                            child: Text(
-                              'Privacy Policy',
-                              style: TextStyle(
-                                  fontSize: 14.0, color: Colors.orange, fontWeight: FontWeight.w300, decoration: TextDecoration.underline),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          InkWell(
-                            onTap: (){
-                              // open the webview for terms and conditions
-                            },
-                            child: Text(
-                              'Terms & Conditions',
-                              style: TextStyle(
-                                fontSize: 14.0, color: Colors.orange, fontWeight: FontWeight.w300, decoration: TextDecoration.underline,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          InkWell(
-                            onTap: (){
-                              Navigator.pushReplacementNamed(context, "/register");
-                            },
-                            child: Text(
-                              'New User? Register Here',
-                              style: TextStyle(
-                                fontSize: 18.0, color: Colors.green, fontWeight: FontWeight.w500,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          )
-                          // ElevatedButton(
-                          //     style: ButtonStyle(
-                          //       backgroundColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
-                          //       elevation: MaterialStateProperty.all(10),
-                          //       enableFeedback: true,
-                          //       padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 30,vertical: 10)),
-                          //     ),
-                          //     onPressed: (){},
-                          //     child: Text("Login",
-                          //       style: TextStyle(
-                          //         fontSize: 16.5
-                          //       ),
-                          //     )
-                          // )
-                        ],
+                        ),
                       ),
                     ),
                   ),

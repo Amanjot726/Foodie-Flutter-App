@@ -2,18 +2,27 @@
 // import 'package:first_app/News_api.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:first_app/Auth/Register-Page.dart';
-import 'package:first_app/News_api_Listview.dart';
-import 'package:first_app/Listview.dart';
+import 'package:first_app/Practice/Fetch_current_location.dart';
+import 'package:first_app/Restaurants/Restaurant_user_profile.dart';
+import 'package:first_app/Auth/splash-page.dart';
+import 'package:first_app/Practice/John_Jack_Bricks.dart';
+import 'package:first_app/Practice/News_api_Listview.dart';
+import 'package:first_app/Practice/Listview.dart';
+import 'package:first_app/Restaurants/add_dishes.dart';
+import 'package:first_app/Restaurants/add_restaurants.dart';
+import 'package:first_app/Restaurants/cart_page.dart';
+import 'package:first_app/util/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:first_app/profile_page.dart';
+import 'package:first_app/Practice/profile_page.dart';
 import 'package:first_app/Home/splash-page.dart';
 import 'package:first_app/Home/home-page.dart';
-import 'package:first_app/Friends_Colors_Images.dart';
-import 'package:first_app/Tasks.dart';
+import 'package:first_app/Practice/Friends_Colors_Images.dart';
+import 'package:first_app/Practice/Tasks.dart';
 import 'package:flutter/services.dart';
 import 'package:first_app/Home/Settings_Page.dart';
-import 'package:first_app/data-passing.dart';
+import 'package:first_app/Practice/data-passing.dart';
 import 'package:first_app/Auth/Login-Page.dart';
+import 'package:first_app/Restaurants/home_page.dart' as Restaurant;
 
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,7 +42,7 @@ class MyApp extends StatelessWidget{
       DeviceOrientation.portraitDown
     ]);
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: APP_NAME,
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -50,13 +59,22 @@ class MyApp extends StatelessWidget{
       // theme: ThemeData.light().copyWith(accentColor: Colors.green),
       debugShowCheckedModeBanner: false,
       routes: {
-        "/": (context) => SplashPage(),
+        // "/": (context) => SplashPage(),
         "/home": (context) => HomePage(),
+        "/ad": (context) => Profile_UI(),
         "/settings": (context) => SettingsPage(),
+        "/task": (context) => Tasks_page(),
+        "/john_jack": (context) => Input_Bricks_Page(),
+        // "/": (context) => RestaurantSplashPage(),
         "/login": (context) => LoginPage(),
         "/register": (context) => RegisterPage(),
+        "/Restaurant_home": (context) => Restaurant.HomePage(),
+        "/profile": (context) => User_Profile(),
+        "/add_restaurant": (context) => Add_Restaurant_Page(),
+        "/cart": (context) => Cart_Page(),
+        "/fetch_location": (context) => FetchCurrentLocationPage(),
       },
-      initialRoute: "/",
+      initialRoute: "/fetch_location",
       // home: Tasks_page(),
     );
   }

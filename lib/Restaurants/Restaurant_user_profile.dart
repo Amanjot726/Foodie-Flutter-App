@@ -1,0 +1,599 @@
+// import 'package:flutter/cupertino.dart';
+import 'dart:ui';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:first_app/Restaurants/add_restaurants.dart';
+import 'package:first_app/Restaurants/select_restaurant.dart';
+import 'package:first_app/util/constants.dart';
+import 'package:flutter/material.dart';
+import 'dart:io';
+
+import 'package:image_picker/image_picker.dart';
+
+
+XFile? file;
+var file_name = "";
+final ImagePicker Image_Picker = ImagePicker();
+
+
+class Show_Snackbar{
+  String message;
+  BuildContext context;
+  Duration? duration;
+  Show_Snackbar({required this.context,required this.message, this.duration}){
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(this.message.toString()),
+      duration: duration==null?Duration(seconds: 4):duration!,
+    )
+    );
+  }
+}
+
+
+class User_Profile extends StatelessWidget {
+  User_Profile({Key? key}) : super(key: key);
+
+  // String uid = FirebaseAuth.instance.currentUser!= null ? FirebaseAuth.instance.currentUser!.uid.toString() : "";
+  //
+  // Future get_name() async{
+  //   var data_snapshot = await FirebaseFirestore.instance.collection("users").doc(uid).get();
+  //   if (data_snapshot.exists) {
+  //     Map<String, dynamic>? data = data_snapshot.data();
+  //
+  //     // You can then retrieve the value from the Map like this:
+  //     return data!['name'].toString();
+  //   }
+  //
+  // }
+
+
+  var navigation_List = [
+    "/Restaurant_home",
+    "/profile"
+  ];
+
+  var index = 1;
+
+  Color primaryColor = Colors.green;
+
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    get_data();
+
+    return Scaffold(
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.black),
+        actionsIconTheme: IconThemeData(color: Colors.black),
+        title: Row(
+          children: [
+            Image.asset("assets/Restaurants_small.png",width: 36,),
+            SizedBox(width: 6,),
+            Text(APP_NAME,
+              style: TextStyle(
+                  color: Color.fromARGB(185, 0, 0, 0),
+                  fontFamily: 'AlfaSlabOne',
+                  letterSpacing: 1.4
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: primaryColor,
+        actions: [
+          IconButton(
+            onPressed: (){
+              FirebaseAuth.instance.signOut();
+              get_user_data= null;
+              Navigator.pushReplacementNamed(context, "/login");
+            }, icon: Icon(Icons.logout,color: Color.fromARGB(185, 0, 0, 0)),
+            tooltip: "Log Out",
+          ),
+          PopupMenuButton(
+            icon: Icon(Icons.more_vert,color: Color.fromARGB(185, 0, 0, 0)),
+            onSelected: (value) {
+              value!=index?Navigator.pushReplacementNamed(context, navigation_List[value as int]):"";
+            },
+            itemBuilder: (context)=>[
+              PopupMenuItem(
+                child: Text("Home"),
+                value: 0,
+              ),
+              PopupMenuItem(
+                child: Text("Profile"),
+                value: 1,
+              ),
+            ],
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(backgroundColor: Color.fromARGB(255, 231, 231, 231),
+        items: [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined),
+              activeIcon: Icon(Icons.home),
+              label: "Home"
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline),
+              activeIcon: Icon(Icons.person_rounded),
+              label: "Profile"
+          ),
+
+        ],
+        currentIndex: index,
+        selectedFontSize: 12,
+        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+        selectedItemColor: primaryColor,
+        onTap: (idx) {
+          index!=idx ? Navigator.pushReplacementNamed(context, navigation_List[idx]) :
+          index = idx;
+        }
+      ),
+      body: Container(
+        child: ListView(
+          children: [
+            SizedBox(height: 35,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Profile",
+                  style: TextStyle(
+                      color: Color.fromARGB(178, 13, 97, 57),
+                      fontFamily: 'AlfaSlabOne',
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 2.0
+                    // decoration: TextDecoration.underline,
+                  ),
+                )
+              ],
+            ),
+            SizedBox(height: 25,),
+            ProfilePic(),
+            SizedBox(height: 18,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(get_user_data==null?"":get_user_data!.name as String,
+                    style: TextStyle(
+                    color: Color.fromARGB(146, 0, 0, 0),
+                    fontFamily: 'Righteous',
+                    fontSize: 21.5,
+                  ),
+                )
+              ],
+            ),
+            SizedBox(height: 6,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  get_user_data==null?"":get_user_data!.email as String,
+                  style: TextStyle(
+                      color: Color.fromARGB(128, 0, 0, 0),
+                      fontFamily: 'Roboto',
+                      fontSize: 15.3
+                  ),
+                )
+              ],
+            ),
+            SizedBox(height: 35,),
+            Container(
+              // width: 330,
+              padding: EdgeInsets.symmetric(horizontal: 34,vertical: 25),
+              margin: EdgeInsets.symmetric(horizontal: 35),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Color.fromARGB(35, 19, 181, 103),
+              ),
+              child: Column(
+                children:[
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Column(
+                          children: [
+                            Row(
+                                children:[
+                                  Text("Orders",
+                                    style: TextStyle(
+                                        color: Color.fromARGB(171, 13, 97, 57),
+                                        fontFamily: 'Roboto',
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16.0
+                                    ),
+                                  )
+                                ]
+                            ),
+                            SizedBox(height: 20,),
+                            Row(
+                              children: [
+                                Text("23",
+                                  style: TextStyle(
+                                      color: Color.fromARGB(171, 13, 97, 57),
+                                      fontFamily: 'Roboto',
+                                      fontSize: 15.1
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                        Spacer(),
+                        Column(
+                          children: [
+                            Row(
+                                children:[
+                                  Text("Favorites",
+                                    style: TextStyle(
+                                        color: Color.fromARGB(171, 13, 97, 57),
+                                        fontFamily: 'Roboto',
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16.0
+                                    ),
+                                  )
+                                ]
+                            ),
+                            SizedBox(height: 20,),
+                            Row(
+                              children: [
+                                Text("82",
+                                  style: TextStyle(
+                                      color: Color.fromARGB(171, 13, 97, 57),
+                                      fontFamily: 'Roboto',
+                                      fontSize: 15.1
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                        Spacer(),
+                        Column(
+                          children: [
+                            Row(
+                                children:[
+                                  Text("Saved",
+                                    style: TextStyle(
+                                        color: Color.fromARGB(171, 13, 97, 57),
+                                        fontFamily: 'Roboto',
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16.0
+                                    ),
+                                  )
+                                ]
+                            ),
+                            SizedBox(height: 20,),
+                            Row(
+                              children: [
+                                Text("134",
+                                  style: TextStyle(
+                                      color: Color.fromARGB(171, 13, 97, 57),
+                                      fontFamily: 'Roboto',
+                                      fontSize: 15.1
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+
+                      ]
+                  ),
+                  SizedBox(height: 40,),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          borderRadius: BorderRadius.circular(20),
+                          splashColor: Colors.black38,
+                          onTap: (){},
+                          child: Container(
+                            width: 120,
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Color.fromARGB(136, 19, 181, 103),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Color.fromARGB(124, 31, 159, 98),
+                                  blurRadius: 6.0,
+                                  spreadRadius: 2.0,
+                                ),
+                              ]
+                            ),
+                            child: Text(
+                              "See More",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Color.fromARGB(191, 2, 65, 35),
+                                fontFamily: 'Roboto',
+                                fontSize: 15.5
+                              ),
+                            )
+                          )
+                        ),
+                      ]
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 30,),
+            (get_user_data==null)? Container() :
+              (get_user_data!.isAdmin != true) ? Container() :
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SingleChildScrollView(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 25,vertical: 10),
+                            child: Column(
+                              children: [
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.symmetric(vertical: 11,horizontal: 64),
+                                      primary: Color.fromARGB(203, 69, 205, 137),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      )
+                                  ),
+                                  child: Text("Add Restaurants",
+                                    style: TextStyle(
+                                      fontFamily: 'Roboto',
+                                      fontSize: 15.5,
+                                      color: Color.fromARGB(191, 2, 65, 35),
+                                    ),
+                                  ),
+                                  onPressed: (){
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=> Add_Restaurant_Page()));
+                                  },
+                                ),
+                                SizedBox(height: 15,),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.symmetric(vertical: 11,horizontal: 35),
+                                      primary: Color.fromARGB(203, 69, 205, 137),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      )
+                                  ),
+                                  child: Text("Add Dishes to Restaurants",
+                                    style: TextStyle(
+                                      fontFamily: 'Roboto',
+                                      fontSize: 15.5,
+                                      color: Color.fromARGB(191, 2, 65, 35),
+                                    ),
+                                  ),
+                                  onPressed: (){
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=> Select_Restaurant()));
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                )
+              ],
+            ),
+      ),
+    );
+  }
+}
+
+
+
+class ProfilePic extends StatefulWidget {
+  const ProfilePic({Key? key}) : super(key: key);
+
+  @override
+  _ProfilePicState createState() => _ProfilePicState();
+}
+
+class _ProfilePicState extends State<ProfilePic> {
+
+
+  _show_Dialog_Box(BuildContext dialogContext) async {
+    return showDialog(
+      context: dialogContext,
+      builder: (dialogContext) {
+        return SimpleDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
+          title: Text(
+            'Choose New Photo',
+            style: TextStyle(
+                color: Colors.black87,
+                fontSize: 20
+            ),
+          ),
+          children: [
+            SizedBox(height: 3,),
+            SimpleDialogItem(
+              leading_Icon: Icon(
+                Icons.photo_camera,
+                color: Colors.black45,
+                size: 21.0,
+              ),
+              text: Text(
+                'Camera',
+                style: TextStyle(
+                    fontSize: 16.5
+                ),
+              ),
+              padding: EdgeInsets.all(6),
+              onPressed: ()async {
+                file = await Image_Picker.pickImage(source: ImageSource.camera);
+                Navigator.pop(dialogContext);
+              },
+            ),
+            SimpleDialogItem(
+              leading_Icon: Icon(
+                Icons.photo_size_select_actual_outlined,
+                color: Colors.black45,
+                size: 21,
+              ),
+              text: Text(
+                'Gallery',
+                style: TextStyle(
+                    fontSize: 16.5
+                ),
+              ),
+              padding: EdgeInsets.all(6),
+              onPressed: () async {
+                file = await Image_Picker.pickImage(source: ImageSource.gallery);
+                Navigator.pop(dialogContext);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+
+    Future<String> UploadImage(ImageFile) async {
+      Show_Snackbar(context: context, message: "Uploading...",duration: Duration(milliseconds: 1500));
+      var uploadTask = await FirebaseStorage.instance.ref('profile-pics/'+get_user_data!.uid.toString()+"."+file!.name.toString().split(".").last).putFile(ImageFile);
+      Show_Snackbar(context: context, message: "Uploaded",duration: Duration(milliseconds: 1500));
+      String downlaodUrl = await uploadTask.ref.getDownloadURL();
+      return downlaodUrl;
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        InkWell(
+          borderRadius: BorderRadius.circular(100),
+          onTap: () async {
+            await _show_Dialog_Box(context);
+            if (file != null){
+              var url = await UploadImage(File(file!.path));
+              setState((){
+                get_user_data!.Profile_pic = url;
+                FirebaseFirestore.instance.collection(USERS_COLLECTION).doc(get_Uid()).update({"profile_pic":get_user_data!.Profile_pic});
+                file = null;
+              });
+            }
+          },
+          child: Container(
+              height: get_user_data!=null? get_user_data!.Profile_pic!=""? 120 : 130 : 130,
+              width: get_user_data!=null? get_user_data!.Profile_pic!=""? 120 : 130 : 130,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color.fromARGB(96, 31, 159, 98),
+                      blurRadius: get_user_data!=null?get_user_data!.Profile_pic!=""? 8.0 : 8.0 : 8.0,
+                      spreadRadius: get_user_data!=null? get_user_data!.Profile_pic!=""? 6.0 : -5 : -5,
+                      offset: Offset(
+                        -0.0,
+                        1.0,
+                      ),
+                    ),
+                  ]
+              ),
+              child: (get_user_data!=null ?
+              (get_user_data!.Profile_pic!="") ?
+              ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: Image.network(
+                    get_user_data!=null ? get_user_data!.Profile_pic!=""? get_user_data!.Profile_pic as String : "" : "",
+                    height: 120,
+                    width: 120,
+                    fit: BoxFit.cover,
+                    loadingBuilder: (context,child,loadingProgress) {
+                      return loadingProgress == null ? child : Center(child: CircularProgressIndicator());
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      print(error);
+                      return ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: Align(
+                              alignment: Alignment.center,
+                              child: Icon(
+                                Icons.account_circle,
+                                size: 120,
+                                color: Colors.white,
+                              )
+                          )
+                      );
+                    },
+                  )
+              )
+                  :
+              ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: Align(
+                      alignment: Alignment.center,
+                      child: Icon(
+                        Icons.account_circle,
+                        size: 130,
+                        color: Colors.white,
+                      )
+                  )
+              )
+                  :
+              ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: Align(
+                      alignment: Alignment.center,
+                      child: Icon(
+                        Icons.account_circle,
+                        size: 130,
+                        color: Colors.white,
+                      )
+                  )
+              )
+            )
+          ),
+        )
+      ],
+    );
+  }
+}
+
+
+
+
+
+class SimpleDialogItem extends StatelessWidget {
+  final Icon? leading_Icon;
+  final Text? text;
+  final EdgeInsets? padding;
+  final VoidCallback? onPressed;
+  SimpleDialogItem({Key? key, this.leading_Icon, this.text, this.padding, this.onPressed}): super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialogOption(
+      onPressed: onPressed,
+      child: Padding(
+        padding: padding==null?EdgeInsets.all(6.0):padding!,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            leading_Icon==null?Container():leading_Icon!,
+            Padding(
+              padding: const EdgeInsetsDirectional.only(start: 16.0),
+              child: text!,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
