@@ -37,7 +37,7 @@ samples, guidance on mobile development, and a full API reference.
 
 - i3/i5 Processor
 
-## Website to practice
+## Website for practice
 
 - [dartpad.dev](https://dartpad.dev/)
 
