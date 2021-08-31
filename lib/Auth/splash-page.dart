@@ -55,7 +55,7 @@ class RestaurantSplashPage extends StatelessWidget {
                 )
             ),
             SizedBox(height: 6,),
-            Text("For Most Countries",
+            Text("Tasty Food For All",
                 style: TextStyle(
                     color: Colors.black26,
                     fontSize: 15,

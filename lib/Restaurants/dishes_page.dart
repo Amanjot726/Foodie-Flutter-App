@@ -97,6 +97,7 @@ class _Dishes_PageState extends State<Dishes_Page> {
                     ),
                   )
                 : ListView(
+                physics: BouncingScrollPhysics(),
                     padding: EdgeInsets.all(20),
                     children: snapshot.data!.docs.map<Widget>((DocumentSnapshot document) {
                       Map<String, dynamic> map = document.data()! as Map<String, dynamic>;
@@ -311,34 +312,36 @@ class _CounterState extends State<Counter> {
   // int initialValue = CART[Dish_id] ?? 0;
 
   Increase_Quantity(){
-    if (!CART.keys.toList().contains(widget.dish_id)){             // if CART dictionary not contains current dish id
+    if (!CART.keys.toList().contains(widget.dish_id)){
       widget.details!['quantity'] = 1;
       CART[widget.dish_id] = widget.details;
     }
-    else{                                                                     // if CART dictionary contains current dish id
-      CART[widget.dish_id]['quantity']++;
-      // CART.update(widget.dish_id.toString(), (value) => CART[widget.dish_id.toString()]);
+    else{
+      if(CART[widget.dish_id]['quantity']!=null){
+        CART[widget.dish_id]['quantity']++;
+      }
+      else{
+        widget.details!['quantity'] = 1;
+        CART[widget.dish_id] = widget.details;
+      }
     }
-    // }
-    // Show_Snackbar(context: context, message: CART.toString(),duration: Duration(milliseconds: 700));
   }
 
   Decrease_Quantity(){
     if (CART[widget.dish_id]['quantity'] <= 1) {
       CART[widget.dish_id]['quantity'] = 0;
-      if (CART.keys.toList().contains(widget.dish_id)){            // if CART dictionary contains current dish id
+      if (CART.keys.toList().contains(widget.dish_id)){
         CART.remove(widget.dish_id);
       }
-      // Show_Snackbar(context: context, message: CART.toString(),duration: Duration(milliseconds: 700));
-
     }
     else {
-      if (CART.keys.toList().contains(widget.dish_id)){   // if CART dictionary not contains current dish id
-        CART[widget.dish_id]['quantity']--;
-      }
-      else{                                       // if CART dictionary not contains current dish id
-        CART[widget.dish_id]['quantity'] = 0;
-        // CART.update(widget.dish_id.toString(), (value) => CART[widget.dish_id]['quantity']);
+      if (CART.keys.toList().contains(widget.dish_id)){
+        if(CART[widget.dish_id]['quantity']!=null || CART[widget.dish_id]['quantity']!=1){
+          CART[widget.dish_id]['quantity']--;
+        }
+        else{
+          CART[widget.dish_id]['quantity'] = 0;
+        }
       }
       // Show_Snackbar(context: context, message: CART.toString(),duration: Duration(milliseconds: 700));
     }
@@ -347,7 +350,7 @@ class _CounterState extends State<Counter> {
   fetch_Dish_count() {
     // Stream is a Collection i.e. a List of QuerySnapshot
     // QuerySnapshot is our Document :)
-    Stream<DocumentSnapshot<Map<String,dynamic>>> stream = USER_COLLECTION.doc(get_Uid()).snapshots();
+    Stream<DocumentSnapshot<Map<String,dynamic>>> stream = USERS_COLLECTION.doc(get_Uid()).snapshots();
     return stream;
   }
 
@@ -359,7 +362,7 @@ class _CounterState extends State<Counter> {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
           decoration: BoxDecoration(shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(10), border: Border.all(color: Colors.black)),
-          child: (CART[widget.dish_id] == null || CART[widget.dish_id] == 0) ?
+          child: (CART[widget.dish_id] == null || CART[widget.dish_id] == 0 || CART[widget.dish_id]['quantity'] == null || CART[widget.dish_id]['quantity'] == 0) ?
             Tooltip(
               message: "Quantity: Add More",
               child: Row(
@@ -417,7 +420,6 @@ class _CounterState extends State<Counter> {
                       timer = Timer.periodic(Duration(milliseconds: 200), (t) {
                         setState(() {
                           CART[widget.dish_id]['quantity']++;
-                          CART[widget.dish_id] = widget.details;
                         });
                       });
                       Update_Cart();
@@ -474,18 +476,7 @@ class _CounterState extends State<Counter> {
                     onTapDown: (TapDownDetails details) {
                       timer = Timer.periodic(Duration(milliseconds: 200), (t) {
                         setState(() {
-                          if (CART[widget.dish_id.toString()]['quantity'] <= 1) {
-                            if (CART.keys.toList().contains(widget.dish_id)){
-                              Decrease_Quantity();
-                            }
-                            timer!.cancel();
-                          }
-                          else{
-                            if (CART.keys.toList().contains(widget.dish_id)){
                               CART[widget.dish_id]['quantity']--;
-                              CART[widget.dish_id] = widget.details;
-                            }
-                          }
                         });
                       });
                       Update_Cart();

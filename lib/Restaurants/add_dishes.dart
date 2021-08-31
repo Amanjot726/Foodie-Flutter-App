@@ -105,6 +105,7 @@ class _Add_dishesState extends State<Add_dishes> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(20.0),
                         child: SingleChildScrollView(
+                          physics: BouncingScrollPhysics(),
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 25,vertical: 10),
                             child: Form(

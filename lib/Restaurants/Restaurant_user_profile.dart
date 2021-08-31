@@ -110,31 +110,44 @@ class User_Profile extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(backgroundColor: Color.fromARGB(255, 231, 231, 231),
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined),
-              activeIcon: Icon(Icons.home),
-              label: "Home"
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline),
-              activeIcon: Icon(Icons.person_rounded),
-              label: "Profile"
-          ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Color.fromARGB(37, 0, 0, 0),
+              blurRadius: 3,
+              spreadRadius: 1,
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          backgroundColor: Color.fromARGB(255, 246, 246, 246),
+          items: [
+            BottomNavigationBarItem(
+                icon: Icon(Icons.home_outlined),
+                activeIcon: Icon(Icons.home),
+                label: "Home"
+            ),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.person_outline),
+                activeIcon: Icon(Icons.person_rounded),
+                label: "Profile"
+            ),
 
-        ],
-        currentIndex: index,
-        selectedFontSize: 12,
-        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-        selectedItemColor: primaryColor,
-        onTap: (idx) {
-          index!=idx ? Navigator.pushReplacementNamed(context, navigation_List[idx]) :
-          index = idx;
-        }
+          ],
+          currentIndex: index,
+          selectedFontSize: 12,
+          selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+          selectedItemColor: primaryColor,
+          onTap: (idx) {
+            index!=idx ? Navigator.pushReplacementNamed(context, navigation_List[idx]) :
+            index = idx;
+          }
+        ),
       ),
       body: Container(
         child: ListView(
+          physics: BouncingScrollPhysics(),
           children: [
             SizedBox(height: 35,),
             Row(
@@ -159,7 +172,7 @@ class User_Profile extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(get_user_data==null?"":get_user_data!.name as String,
+                Text(get_user_data==null?"":get_user_data!.name==null?"":get_user_data!.name as String,
                     style: TextStyle(
                     color: Color.fromARGB(146, 0, 0, 0),
                     fontFamily: 'Righteous',
@@ -182,11 +195,11 @@ class User_Profile extends StatelessWidget {
                 )
               ],
             ),
-            SizedBox(height: 35,),
+            SizedBox(height: 30,),
             Container(
               // width: 330,
-              padding: EdgeInsets.symmetric(horizontal: 34,vertical: 25),
-              margin: EdgeInsets.symmetric(horizontal: 35),
+              padding: EdgeInsets.symmetric(horizontal: 33,vertical: 25),
+              margin: EdgeInsets.symmetric(horizontal: 32),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 color: Color.fromARGB(35, 19, 181, 103),
@@ -217,7 +230,7 @@ class User_Profile extends StatelessWidget {
                                   style: TextStyle(
                                       color: Color.fromARGB(171, 13, 97, 57),
                                       fontFamily: 'Roboto',
-                                      fontSize: 15.1
+                                      fontSize: 15.2
                                   ),
                                 )
                               ],
@@ -246,7 +259,7 @@ class User_Profile extends StatelessWidget {
                                   style: TextStyle(
                                       color: Color.fromARGB(171, 13, 97, 57),
                                       fontFamily: 'Roboto',
-                                      fontSize: 15.1
+                                      fontSize: 15.2
                                   ),
                                 )
                               ],
@@ -275,7 +288,7 @@ class User_Profile extends StatelessWidget {
                                   style: TextStyle(
                                       color: Color.fromARGB(171, 13, 97, 57),
                                       fontFamily: 'Roboto',
-                                      fontSize: 15.1
+                                      fontSize: 15.2
                                   ),
                                 )
                               ],
@@ -285,104 +298,257 @@ class User_Profile extends StatelessWidget {
 
                       ]
                   ),
-                  SizedBox(height: 40,),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        InkWell(
-                          borderRadius: BorderRadius.circular(20),
-                          splashColor: Colors.black38,
-                          onTap: (){},
-                          child: Container(
-                            width: 120,
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Color.fromARGB(136, 19, 181, 103),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color.fromARGB(124, 31, 159, 98),
-                                  blurRadius: 6.0,
-                                  spreadRadius: 2.0,
-                                ),
-                              ]
-                            ),
-                            child: Text(
-                              "See More",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Color.fromARGB(191, 2, 65, 35),
-                                fontFamily: 'Roboto',
-                                fontSize: 15.5
-                              ),
-                            )
-                          )
-                        ),
-                      ]
-                  ),
+                  // SizedBox(height: 40,),
+                  // Row(
+                  //     mainAxisAlignment: MainAxisAlignment.center,
+                  //     children: [
+                  //       InkWell(
+                  //         borderRadius: BorderRadius.circular(20),
+                  //         splashColor: Colors.black38,
+                  //         onTap: (){},
+                  //         child: Container(
+                  //           width: 120,
+                  //           padding: EdgeInsets.all(10),
+                  //           decoration: BoxDecoration(
+                  //             borderRadius: BorderRadius.circular(20),
+                  //             color: Color.fromARGB(136, 19, 181, 103),
+                  //             boxShadow: [
+                  //               BoxShadow(
+                  //                 color: Color.fromARGB(124, 31, 159, 98),
+                  //                 blurRadius: 6.0,
+                  //                 spreadRadius: 2.0,
+                  //               ),
+                  //             ]
+                  //           ),
+                  //           child: Text(
+                  //             "See More",
+                  //             textAlign: TextAlign.center,
+                  //             style: TextStyle(
+                  //               color: Color.fromARGB(191, 2, 65, 35),
+                  //               fontFamily: 'Roboto',
+                  //               fontSize: 15.5
+                  //             ),
+                  //           )
+                  //         )
+                  //       ),
+                  //     ]
+                  // ),
                 ],
               ),
             ),
-            SizedBox(height: 30,),
-            (get_user_data==null)? Container() :
-              (get_user_data!.isAdmin != true) ? Container() :
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SingleChildScrollView(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 25,vertical: 10),
-                            child: Column(
-                              children: [
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      padding: EdgeInsets.symmetric(vertical: 11,horizontal: 64),
-                                      primary: Color.fromARGB(203, 69, 205, 137),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      )
-                                  ),
-                                  child: Text("Add Restaurants",
-                                    style: TextStyle(
-                                      fontFamily: 'Roboto',
-                                      fontSize: 15.5,
-                                      color: Color.fromARGB(191, 2, 65, 35),
-                                    ),
-                                  ),
-                                  onPressed: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=> Add_Restaurant_Page()));
-                                  },
-                                ),
-                                SizedBox(height: 15,),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      padding: EdgeInsets.symmetric(vertical: 11,horizontal: 35),
-                                      primary: Color.fromARGB(203, 69, 205, 137),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      )
-                                  ),
-                                  child: Text("Add Dishes to Restaurants",
-                                    style: TextStyle(
-                                      fontFamily: 'Roboto',
-                                      fontSize: 15.5,
-                                      color: Color.fromARGB(191, 2, 65, 35),
-                                    ),
-                                  ),
-                                  onPressed: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=> Select_Restaurant()));
-                                  },
-                                ),
-                              ],
+            // (get_user_data==null)? Container() :
+            //   (get_user_data!.isAdmin != true) ? Container() :
+            //     Column(
+            //       children: [
+            //         Row(
+            //           mainAxisAlignment: MainAxisAlignment.center,
+            //           children: [
+            //             SingleChildScrollView(
+            //               child: Container(
+            //                 padding: EdgeInsets.symmetric(horizontal: 25,vertical: 10),
+            //                 child: Column(
+            //                   children: [
+            //                     ElevatedButton(
+            //                       style: ElevatedButton.styleFrom(
+            //                           padding: EdgeInsets.symmetric(vertical: 11,horizontal: 64),
+            //                           primary: Color.fromARGB(203, 69, 205, 137),
+            //                           shape: RoundedRectangleBorder(
+            //                             borderRadius: BorderRadius.circular(12),
+            //                           )
+            //                       ),
+            //                       child: Text("Add Restaurants",
+            //                         style: TextStyle(
+            //                           fontFamily: 'Roboto',
+            //                           fontSize: 15.5,
+            //                           color: Color.fromARGB(191, 2, 65, 35),
+            //                         ),
+            //                       ),
+            //                       onPressed: (){
+            //                         Navigator.push(context, MaterialPageRoute(builder: (context)=> Add_Restaurant_Page()));
+            //                       },
+            //                     ),
+            //                     SizedBox(height: 15,),
+            //                     ElevatedButton(
+            //                       style: ElevatedButton.styleFrom(
+            //                           padding: EdgeInsets.symmetric(vertical: 11,horizontal: 35),
+            //                           primary: Color.fromARGB(203, 69, 205, 137),
+            //                           shape: RoundedRectangleBorder(
+            //                             borderRadius: BorderRadius.circular(12),
+            //                           )
+            //                       ),
+            //                       child: Text("Add Dishes to Restaurants",
+            //                         style: TextStyle(
+            //                           fontFamily: 'Roboto',
+            //                           fontSize: 15.5,
+            //                           color: Color.fromARGB(191, 2, 65, 35),
+            //                         ),
+            //                       ),
+            //                       onPressed: (){
+            //                         Navigator.push(context, MaterialPageRoute(builder: (context)=> Select_Restaurant()));
+            //                       },
+            //                     ),
+            //                   ],
+            //                 ),
+            //               ),
+            //             ),
+            //           ],
+            //         ),
+            //       ],
+            //     ),
+            // SizedBox(height: 10,),
+            Container(
+              child: Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Color.fromARGB(54, 64, 64, 64),width: 1.5),
+
+                  ),
+                  child: Column(
+                    children: [
+                      ListTile(
+                        shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(18.5)),
+                        ),
+                        leading: Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Icon(Icons.person,size: 26,),
+                        ),
+                        dense: true,
+                        title: Text("Manage Profile",overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 16,color: Color.fromARGB(181, 0, 0, 0)),),
+                        subtitle: Text("Update Your Data for Your Account",overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 13),),
+                        trailing: Icon(Icons.keyboard_arrow_right_rounded),
+                        onTap: (){
+
+                        },
+                      ),
+                      Divider(height: 1,indent: 5,endIndent: 5,thickness: 1,color: Color.fromARGB(20, 49, 49, 49),),
+                      ListTile(
+                        leading: Padding(
+                          padding: const EdgeInsets.only(top: 4,left: 1),
+                          child: Icon(Icons.shopping_cart,size: 25),
+                        ),
+                        dense: true,
+                        title: Text("Manage Orders",overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 16,color: Color.fromARGB(181, 0, 0, 0)),),
+                        subtitle: Text("Manage Your Order History Here",overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 13),),
+                        trailing: Icon(Icons.keyboard_arrow_right_rounded),
+                        onTap: (){
+
+                        },
+                      ),
+                      Divider(height: 1,indent: 5,endIndent: 5,thickness: 1,color: Color.fromARGB(20, 49, 49, 49),),
+                      ListTile(
+                        // visualDensity: VisualDensity.comfortable,
+                        leading: Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Icon(Icons.home,size: 26),
+                        ),
+                        dense: true,
+                        title: Text("Manage Addresses",overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 16,color: Color.fromARGB(181, 0, 0, 0)),),
+                        subtitle: Text("Update Your Addresses for Delivery",overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 13),),
+                        trailing: Icon(Icons.keyboard_arrow_right_rounded),
+                        onTap: (){
+                          Navigator.pushNamed(context, '/Addresses');
+                        },
+                      ),
+                      (get_user_data==null)? Container() :
+                        (get_user_data!.isAdmin != true) ? Container() :
+                        Column(
+                          children: [
+                            Divider(height: 1,indent: 5,endIndent: 5,thickness: 1,color: Color.fromARGB(20, 49, 49, 49),),
+                            ListTile(
+                              // visualDensity: VisualDensity.comfortable,
+                              leading: Padding(
+                                padding: const EdgeInsets.only(top: 5,left: 2),
+                                child: Icon(Icons.dining, size: 24,),
+                              ),
+                              dense: true,
+                              title: Text("Manage Restaurants", overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 16,color: Color.fromARGB(181, 0, 0, 0)),),
+                              subtitle: Text("Add More Restaurants to App", overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 13),),
+                              trailing: Icon(Icons.keyboard_arrow_right_rounded,),
+                              onTap: () {
+                                Navigator.pushNamed(context, "/add_restaurant");
+                              },
                             ),
+                            Divider(height: 1,indent: 5,endIndent: 5,thickness: 1,color: Color.fromARGB(20, 49, 49, 49),),
+                            ListTile(
+                              // visualDensity: VisualDensity.comfortable,
+                              leading: Padding(
+                                padding: const EdgeInsets.only(top: 4),
+                                child: Icon(Icons.restaurant_menu, size: 26,),
+                              ),
+                              dense: true,
+                              title: Text("Manage Dishes", overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 16,color: Color.fromARGB(181, 0, 0, 0)),),
+                              subtitle: Text("Add Dishes to the Restaurants", overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 13),),
+                              trailing: Icon(Icons.keyboard_arrow_right_rounded),
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=> Select_Restaurant()));
+                              },
+                            ),
+                          ],
+                        ),
+                      Divider(height: 1,indent: 5,endIndent: 5,thickness: 1,color: Color.fromARGB(20, 49, 49, 49),),
+                      ListTile(
+                        leading: Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Icon(Icons.delivery_dining,size: 26,),
+                        ),
+                        dense: true,
+                        title: Text("Manage Delivery",overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 16,color: Color.fromARGB(181, 0, 0, 0)),),
+                        subtitle: Text("Check Your Delivery Status",overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 13),),
+                        trailing: Icon(Icons.keyboard_arrow_right_rounded),
+                        onTap: (){
+
+                        },
+                      ),
+                      Divider(height: 1,indent: 5,endIndent: 5,thickness: 1,color: Color.fromARGB(20, 49, 49, 49),),
+                      ListTile(
+                        leading: Padding(
+                          padding: const EdgeInsets.only(top: 4,left: 2),
+                          child: Icon(Icons.message,size: 23,),
+                        ),
+                        dense: true,
+                        title: Text("Help",
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Color.fromARGB(181, 0, 0, 0)
                           ),
                         ),
-                      ],
-                    ),
-                  ],
-                )
+                        subtitle: Text("Raise Your Queries",overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 13),),
+                        trailing: Icon(Icons.keyboard_arrow_right_rounded,),
+                        onTap: (){
+
+                        },
+                      ),
+                      Divider(height: 1,indent: 5,endIndent: 5,thickness: 1,color: Color.fromARGB(20, 49, 49, 49),),
+                      ListTile(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(bottom: Radius.circular(18.5)),
+                        ),
+                        leading: Padding(
+                          padding: const EdgeInsets.only(top: 5,left: 2),
+                          child: Icon(Icons.document_scanner_outlined,size: 24,),
+                        ),
+                        title: Text("Terms & Conditions",
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Color.fromARGB(181, 0, 0, 0),
+                          ),
+                        ),
+                        subtitle: Text("Check our Terms and Conditions",overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 13),),
+                        trailing: Icon(Icons.keyboard_arrow_right_rounded,),
+                        onTap: (){
+
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
               ],
             ),
       ),
@@ -482,7 +648,7 @@ class _ProfilePicState extends State<ProfilePic> {
               var url = await UploadImage(File(file!.path));
               setState((){
                 get_user_data!.Profile_pic = url;
-                FirebaseFirestore.instance.collection(USERS_COLLECTION).doc(get_Uid()).update({"profile_pic":get_user_data!.Profile_pic});
+                USERS_COLLECTION.doc(get_Uid()).update({"profile_pic":get_user_data!.Profile_pic});
                 file = null;
               });
             }
@@ -505,11 +671,11 @@ class _ProfilePicState extends State<ProfilePic> {
                   ]
               ),
               child: (get_user_data!=null ?
-              (get_user_data!.Profile_pic!="") ?
+              (get_user_data!.Profile_pic != "") ?
               ClipRRect(
                   borderRadius: BorderRadius.circular(100),
                   child: Image.network(
-                    get_user_data!=null ? get_user_data!.Profile_pic!=""? get_user_data!.Profile_pic as String : "" : "",
+                    get_user_data!.Profile_pic??"",
                     height: 120,
                     width: 120,
                     fit: BoxFit.cover,
@@ -517,7 +683,6 @@ class _ProfilePicState extends State<ProfilePic> {
                       return loadingProgress == null ? child : Center(child: CircularProgressIndicator());
                     },
                     errorBuilder: (context, error, stackTrace) {
-                      print(error);
                       return ClipRRect(
                           borderRadius: BorderRadius.circular(100),
                           child: Align(

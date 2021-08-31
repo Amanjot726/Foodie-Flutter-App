@@ -7,19 +7,30 @@ import 'package:flutter/material.dart';
 final APP_NAME="Foodie";
 final RESTAURANT_COLLECTION = FirebaseFirestore.instance.collection("restaurants");
 final DISHES_COLLECTION="dishes";
-final USER_COLLECTION = FirebaseFirestore.instance.collection("users");
+final USERS_COLLECTION = FirebaseFirestore.instance.collection("users");
 // final FIREBASE_Auth = FirebaseAuth.instance;
 // final FIREBASE_Storage = FirebaseStorage.instance;
 // final FIREBASE_Firestore = FirebaseFirestore.instance;
 final APP_ICON="Restaurants.png";
 final Color PRIMARY_COLOR = Colors.green;
-final String USERS_COLLECTION="users";
 
-var CART = {};
+Map CART = {};
+Map ADDRESSES = {};
 
 Update_Cart() async{
   await FirebaseFirestore.instance.collection("users").doc(get_Uid()).update({"cart" : CART});
 }
+
+Add_Cart() async{
+  await FirebaseFirestore.instance.collection("users").doc(get_Uid()).set({'cart': Map()},SetOptions(merge: true));
+  return {};
+}
+
+Add_Address_Field() async{
+  await FirebaseFirestore.instance.collection("users").doc(get_Uid()).set({'address': Map()},SetOptions(merge: true));
+  return {};
+}
+
 
 
 AppUser? get_user_data;
@@ -40,7 +51,10 @@ Future get_data() async {
       email: data['email'],
       Profile_pic: data['profile_pic'],
       isAdmin: data['isAdmin'],
+      cart: data['cart'],
+      address: data['address']
     );
-    CART = data['cart'];
+    CART = get_user_data!.cart ?? await Add_Cart();
+    ADDRESSES = get_user_data!.address ?? await Add_Address_Field();
   }
 }

@@ -189,6 +189,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: SingleChildScrollView(
+                      physics: BouncingScrollPhysics(),
                       child: Container(
                         // height: MediaQuery.of(context).size.height/2.5,
                         width: MediaQuery.of(context).size.width/1.2,

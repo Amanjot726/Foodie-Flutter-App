@@ -1,8 +1,14 @@
 // import 'package:first_app/News_api.dart';
 // import 'package:first_app/News_api.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:first_app/Auth/Register-Page.dart';
 import 'package:first_app/Practice/Fetch_current_location.dart';
+import 'package:first_app/Practice/Google-maps-with-location.dart';
+import 'package:first_app/Restaurants/Address_Page.dart';
+import 'package:first_app/Restaurants/Map_Page.dart';
 import 'package:first_app/Restaurants/Restaurant_user_profile.dart';
 import 'package:first_app/Auth/splash-page.dart';
 import 'package:first_app/Practice/John_Jack_Bricks.dart';
@@ -24,17 +30,88 @@ import 'package:first_app/Practice/data-passing.dart';
 import 'package:first_app/Auth/Login-Page.dart';
 import 'package:first_app/Restaurants/home_page.dart' as Restaurant;
 
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  //await Firebase.initializeApp();
+  print('Handling a background message ${message.messageId}');
+}
+
+/// Create a [AndroidNotificationChannel] for heads up notifications
+AndroidNotificationChannel? channel;
+
+/// Initialize the [FlutterLocalNotificationsPlugin] package.
+FlutterLocalNotificationsPlugin? flutterLocalNotificationsPlugin;
+
+
 Future<void> main() async{
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+
+  // to execute the app created by us
+  // MyApp -> Object
   runApp(MyApp());
 }
 
 
-class MyApp extends StatelessWidget{
+class MyApp extends StatefulWidget{
+
+    // This widget is the root of your application.
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  @override
+  void initState() {
+    super.initState();
+
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((RemoteMessage? message) {
+      if (message != null) {
+        // Navigator.pushNamed(context, '/message',
+        //     arguments: MessageArguments(message, true));
+      }
+    });
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage? message) {
+
+      RemoteNotification? notification = message!.notification;
+      AndroidNotification? android = message.notification!.android;
+
+      if (notification != null && android != null && !kIsWeb) {
+        flutterLocalNotificationsPlugin!.show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                channel!.id,
+                channel!.name,
+                channel!.description,
+                playSound: true,
+                //sound: AndroidNotificationSound()
+                // TODO add a proper drawable resource to android, for now using
+                //      one that already exists in example app.
+                icon: 'launch_background',
+              ),
+            ));
+      }
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('A new onMessageOpenedApp event was published!');
+      // Navigator.pushNamed(context, '/message',
+      //     arguments: MessageArguments(message, true));
+    });
+  }
 
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -65,16 +142,19 @@ class MyApp extends StatelessWidget{
         "/settings": (context) => SettingsPage(),
         "/task": (context) => Tasks_page(),
         "/john_jack": (context) => Input_Bricks_Page(),
-        // "/": (context) => RestaurantSplashPage(),
+        "/": (context) => RestaurantSplashPage(),
         "/login": (context) => LoginPage(),
         "/register": (context) => RegisterPage(),
         "/Restaurant_home": (context) => Restaurant.HomePage(),
         "/profile": (context) => User_Profile(),
         "/add_restaurant": (context) => Add_Restaurant_Page(),
         "/cart": (context) => Cart_Page(),
+        "/Addresses": (context) => AddressPage(),
         "/fetch_location": (context) => FetchCurrentLocationPage(),
+        "/Address_Google_Map": (context) => Find_Address_From_Map(),
       },
-      initialRoute: "/fetch_location",
+      initialRoute: "/",
+      // initialRoute: "/fetch_location",
       // home: Tasks_page(),
     );
   }

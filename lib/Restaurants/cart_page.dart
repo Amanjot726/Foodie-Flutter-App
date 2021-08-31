@@ -12,7 +12,7 @@ class Cart_Page extends StatelessWidget {
   fetch_Cart_Dishes() {
     // Stream is a Collection i.e. a List of QuerySnapshot
     // QuerySnapshot is our Document :)
-    Stream<DocumentSnapshot<Map<String,dynamic>>> stream = USER_COLLECTION.doc(get_Uid()).snapshots();
+    Stream<DocumentSnapshot<Map<String,dynamic>>> stream = USERS_COLLECTION.doc(get_Uid()).snapshots();
     return stream;
   }
 
@@ -56,7 +56,7 @@ class Cart_Page extends StatelessWidget {
               );
             }
             var map = snapshot.data!;
-            Map<String, dynamic> cart = map['cart'] as Map<String, dynamic>;
+            Map<String, dynamic> cart = map['cart']??{} as Map<String, dynamic>;
             // print("data = "+snapshot.data.docs);
             return snapshot.data==null
                 ? Center(
@@ -66,6 +66,7 @@ class Cart_Page extends StatelessWidget {
               ),
             )
                 : ListView(
+                physics: BouncingScrollPhysics(),
                 padding: EdgeInsets.all(16),
                 children: cart.keys.toList().map((e) {
                   return Padding(
@@ -118,6 +119,9 @@ class Cart_Page extends StatelessWidget {
                                                           width: 60,
                                                           child: Text("No Image Available...",maxLines: 2,
                                                             overflow: TextOverflow.ellipsis,
+                                                            style: TextStyle(
+                                                              fontSize: 13
+                                                            ),
                                                           ),
                                                         ),
                                                       ],
@@ -147,6 +151,9 @@ class Cart_Page extends StatelessWidget {
                                                 width: 60,
                                                 child: Text("No Image Available...",maxLines: 2,
                                                   overflow: TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    fontSize: 13
+                                                  ),
                                                 ),
                                               ),
                                             ],
@@ -333,7 +340,7 @@ class _CounterState extends State<Counter> {
 
     return Container(
         decoration: BoxDecoration(shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(10), border: Border.all(color: Color.fromARGB(188, 36, 36, 36),)),
-        child: (CART[widget.dish_id] == null || CART[widget.dish_id] == 0) ?
+        child: (CART[widget.dish_id] == null || CART[widget.dish_id] == 0 || CART[widget.dish_id]['quantity'] == null || CART[widget.dish_id]['quantity'] == 0) ?
         Tooltip(
           message: "Quantity: Add More",
           child: Row(
@@ -391,7 +398,6 @@ class _CounterState extends State<Counter> {
                       timer = Timer.periodic(Duration(milliseconds: 200), (t) {
                         setState(() {
                           CART[widget.dish_id]['quantity']++;
-                          CART[widget.dish_id] = widget.details;
                         });
                       });
                       Update_Cart();
@@ -454,7 +460,6 @@ class _CounterState extends State<Counter> {
                           else{
                             if(CART.containsKey(widget.dish_id.toString())){
                               CART[widget.dish_id]['quantity']--;
-                              CART[widget.dish_id] = widget.details;
                             }
                           }
                         });

@@ -49,9 +49,9 @@ class _RegisterPageState extends State<RegisterPage> {
       print("User ID is:"+userCredential.user!.uid.toString());
 
       if(userCredential.user!.uid.toString().isNotEmpty){
-        AppUser user = AppUser(uid:userCredential.user!.uid, name:NameController.text.trim(), email:loginIDController.text.trim(), Profile_pic: "",isAdmin: false);
+        AppUser user = AppUser(uid:userCredential.user!.uid, name:NameController.text.trim(), email:loginIDController.text.trim(), Profile_pic: "", isAdmin: false, cart: {}, address: {});
         var dataToSave = user.toMap();
-        USER_COLLECTION.doc(userCredential.user!.uid).set(dataToSave).then((value) {get_data();Navigator.pushReplacementNamed(context, "/Restaurant_home");});
+        USERS_COLLECTION.doc(userCredential.user!.uid).set(dataToSave).then((value) {get_data();Navigator.pushReplacementNamed(context, "/Restaurant_home");});
         Future.delayed(Duration(milliseconds: 500), (){
           setState(() {
             showLoader=false;
@@ -193,6 +193,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: SingleChildScrollView(
+                        physics: BouncingScrollPhysics(),
                         child: Container(
                           // height: MediaQuery.of(context).size.height/1.95,
                           width: MediaQuery.of(context).size.width/1.2,

@@ -124,6 +124,7 @@ class _HomePageState extends State<HomePage>{
             );
           }
           return ListView(
+              physics: BouncingScrollPhysics(),
               padding: EdgeInsets.all(20),
               children: snapshot.data!.docs.map<Widget>((DocumentSnapshot document){
                 Map<String, dynamic> map = document.data()! as Map<String, dynamic>;
@@ -221,7 +222,7 @@ class _HomePageState extends State<HomePage>{
                                     Row(
                                       children: [
                                         Container(
-                                          width: MediaQuery.of(context).size.width/1.65,
+                                          width: MediaQuery.of(context).size.width/1.87,
                                           child: Text(
                                             map['name'],
                                             overflow: TextOverflow.ellipsis,
@@ -242,7 +243,7 @@ class _HomePageState extends State<HomePage>{
                                     Row(
                                       children: [
                                         Container(
-                                          width: MediaQuery.of(context).size.width/1.65,
+                                          width: MediaQuery.of(context).size.width/1.87,
                                           child: Text(
                                             map['category'].toString(),
                                             overflow: TextOverflow.ellipsis,

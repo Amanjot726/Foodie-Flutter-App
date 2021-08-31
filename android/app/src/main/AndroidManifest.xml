@@ -1,8 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.first_app">
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
    <application
         android:label="Foodie"
         android:icon="@drawable/restaurants">
+       <meta-data android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyAYKjiGC24EHRqeteLsrfpcMxLSgtlWpBQ"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
