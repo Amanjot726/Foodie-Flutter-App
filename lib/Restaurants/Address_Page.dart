@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:first_app/Restaurants/add_restaurants.dart';
 import 'package:first_app/util/constants.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AddressPage extends StatelessWidget {
@@ -34,7 +35,7 @@ class AddressPage extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: (){
-            Navigator.pushReplacementNamed(context, "/Address_Google_Map");
+            Navigator.pushNamed(context, "/Address_Google_Map");
           },
           backgroundColor: PRIMARY_COLOR,
           child: Icon(
@@ -135,17 +136,79 @@ class AddressPage extends StatelessWidget {
                       child: Row(
                         children: [
                           Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Image.asset("assets/Restaurants_small.png",width: 36,),
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  border: Border(right: BorderSide(color: Color.fromARGB(10, 0, 0, 0), style: BorderStyle.solid, width: 2))
+                                ),
+                                width: 72,
+                                height: 72,
+                                child: Image.asset(
+                                  "assets/map.png",
+                                  width: 36,
+                                )
+                              ),
                             ],
                           ),
                           Flexible(
-                            child: Column(
-                              children: [
-
-                              ],
+                            flex: 36,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    Addresses![e]['Address Type'],
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontFamily: "Roboto",
+                                      fontWeight: FontWeight.bold,
+                                      // color: Color.fromARGB(154, 0, 0, 0),
+                                      color: Color.fromARGB(176, 0, 0, 0),
+                                    ),
+                                  ),
+                                  SizedBox(height: 4,),
+                                  Text(
+                                    Addresses[e]['Address'],
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: "Roboto",
+                                      // color: Color.fromARGB(154, 0, 0, 0),
+                                      color: Color.fromARGB(176, 0, 0, 0),
+                                    ),
+                                  )
+                                ],
+                              ),
                             )
                           ),
+                          Spacer(),
+                          Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(7),
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(50),
+                                  child: Container(
+                                    padding: EdgeInsets.all(10),
+                                    child: Icon(
+                                      Icons.delete_forever_rounded,
+                                      color: Colors.red[700],
+                                    ),
+                                  ),
+                                  onTap: ()async{
+                                    ADDRESSES.remove(e.toString());
+                                    var result = await Update_Address();
+                                    // Show_Snackbar(context: context,message: ADDRESSES.toString());
+                                  },
+                                ),
+                              )
+                            ],
+                          )
                         ],
                       ),
                     )

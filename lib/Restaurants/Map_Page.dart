@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:geocode/geocode.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'dart:math';
 
 FocusNode _Choose_button_focus_node = new FocusNode();
 final _FormKey = GlobalKey<FormState>();
@@ -23,16 +24,27 @@ class Find_Address_From_Map extends StatefulWidget {
 class _Find_Address_From_MapState extends State<Find_Address_From_Map> {
 
 
+  @override
+  void initState() {
+    checkPermissionsAndFetchLocation();
+  }
+
+
+
   Save_data()async{
     var label = _value=="Custom label" ? Label_Field_Controller.text : _value;
 
     String addres = address!=null? (address!.streetAddress.toString()+", "+address!.region.toString()+", "+address!.countryName.toString()+", "+address!.postal.toString() ).split(" ").map((str) => str.toString()[0].toUpperCase()+str.toString().substring(1)).join(" ") : "";
-    Map mape = {"Address-"+(ADDRESSES.length+1).toString() : {"Address Type": label,"GeoPoint": GeoPoint(28.9122326, 75.6090934),"Address":addres,},};
-    ADDRESSES["Address-"+(ADDRESSES.length+1).toString()] = {"Address Type": label,"GeoPoint": GeoPoint(28.9122326, 75.6090934),"Address":addres,};
-    Show_Snackbar(context: context, message: mape.toString(), duration: Duration(seconds: 5));
-    await FirebaseFirestore.instance.collection("users").doc(get_Uid()).set({"address" : ADDRESSES},SetOptions(merge: true));
-
+    // Map mape = {"Address-"+(ADDRESSES.length+1).toString() : {"Address Type": label,"GeoPoint": GeoPoint(28.9122326, 75.6090934),"Address":addres,},};
+    ADDRESSES["Address-"+(Random().nextInt(2000000)).toString()] = {"Address Type": label,"GeoPoint": GeoPoint(latitude, longitude),"Address":addres,};
+    // Show_Snackbar(context: context, message: mape.toString(), duration: Duration(seconds: 5));
+    Update_Address();
+    setState(() {
+      _value = "Choose";
+      _FormKey.currentState!.reset();
+    });
     Show_Snackbar(context: context, message: "Address Saved");
+    Future.delayed(Duration(seconds: 2), ()=>Navigator.pop(context));
   }
 
 
@@ -211,7 +223,9 @@ class _Find_Address_From_MapState extends State<Find_Address_From_Map> {
                       rotateGesturesEnabled: true,
                       mapToolbarEnabled: false,
                       onMapCreated: (GoogleMapController controller) {
-                        checkPermissionsAndFetchLocation();
+                        setState(() {
+                          checkPermissionsAndFetchLocation();
+                        });
                         _controller.complete(controller);
                         newGoogleMapController = controller;
                       },

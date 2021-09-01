@@ -18,16 +18,20 @@ Map CART = {};
 Map ADDRESSES = {};
 
 Update_Cart() async{
-  await FirebaseFirestore.instance.collection("users").doc(get_Uid()).update({"cart" : CART});
+  await USERS_COLLECTION.doc(get_Uid()).update({"cart" : CART});
+}
+
+Update_Address() async{
+  await USERS_COLLECTION.doc(get_Uid()).update({"address" : ADDRESSES});
 }
 
 Add_Cart() async{
-  await FirebaseFirestore.instance.collection("users").doc(get_Uid()).set({'cart': Map()},SetOptions(merge: true));
+  await USERS_COLLECTION.doc(get_Uid()).set({'cart': Map()},SetOptions(merge: true));
   return {};
 }
 
 Add_Address_Field() async{
-  await FirebaseFirestore.instance.collection("users").doc(get_Uid()).set({'address': Map()},SetOptions(merge: true));
+  await USERS_COLLECTION.doc(get_Uid()).set({'address': Map()},SetOptions(merge: true));
   return {};
 }
 
