@@ -499,7 +499,7 @@ class User_Profile extends StatelessWidget {
                         subtitle: Text("Check Your Delivery Status",overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 13),),
                         trailing: Icon(Icons.keyboard_arrow_right_rounded),
                         onTap: (){
-
+                          Navigator.pushNamed(context, "/Manage_Delivery");
                         },
                       ),
                       Divider(height: 1,indent: 5,endIndent: 5,thickness: 1,color: Color.fromARGB(20, 49, 49, 49),),

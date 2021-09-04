@@ -2,6 +2,7 @@
 // import 'package:first_app/News_api.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:first_app/Restaurants/Manage_Delivery.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:first_app/Auth/Register-Page.dart';
@@ -152,6 +153,7 @@ class _MyAppState extends State<MyApp> {
         "/Addresses": (context) => AddressPage(),
         "/fetch_location": (context) => FetchCurrentLocationPage(),
         "/Address_Google_Map": (context) => Find_Address_From_Map(),
+        "/Manage_Delivery": (context) => ManageDeliveryPage(),
       },
       initialRoute: "/",
       // initialRoute: "/fetch_location",

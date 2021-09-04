@@ -20,9 +20,12 @@ class AddressPage extends StatelessWidget {
           actionsIconTheme: IconThemeData(color: Colors.black),
           title: Row(
             children: [
-              Image.asset("assets/Restaurants_small.png",width: 36,),
-              SizedBox(width: 6,),
-              Text("CART",
+              Opacity(
+                opacity: 0.9,
+                child: Image.asset("assets/address.png",width: 36,)
+              ),
+              SizedBox(width: 8,),
+              Text("Addresses",
                 style: TextStyle(
                     color: Color.fromARGB(185, 0, 0, 0),
                     fontFamily: 'AlfaSlabOne',
@@ -147,13 +150,13 @@ class AddressPage extends StatelessWidget {
                                 width: 72,
                                 height: 72,
                                 child: Image.asset(
-                                  "assets/map.png",
+                                  Addresses![e]['Address Type']=="Home"?"assets/Home_location.png":Addresses[e]['Address Type']=="Work"?"assets/Work_location.png":"assets/map.png",
                                   width: 36,
-                                )
+                                ),
                               ),
                             ],
                           ),
-                          Flexible(
+                          Expanded(
                             flex: 36,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
@@ -161,7 +164,7 @@ class AddressPage extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    Addresses![e]['Address Type'],
+                                    Addresses[e]['Address Type'],
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
                                       fontSize: 18,
@@ -187,27 +190,30 @@ class AddressPage extends StatelessWidget {
                             )
                           ),
                           Spacer(),
-                          Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(7),
-                                child: InkWell(
-                                  borderRadius: BorderRadius.circular(50),
-                                  child: Container(
-                                    padding: EdgeInsets.all(10),
-                                    child: Icon(
-                                      Icons.delete_forever_rounded,
-                                      color: Colors.red[700],
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(7),
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(50),
+                                    child: Container(
+                                      padding: EdgeInsets.all(10),
+                                      child: Icon(
+                                        Icons.delete_forever_rounded,
+                                        color: Colors.red[700],
+                                      ),
                                     ),
+                                    onTap: ()async{
+                                      ADDRESSES.remove(e.toString());
+                                      var result = await Update_Address();
+                                      // Show_Snackbar(context: context,message: ADDRESSES.toString());
+                                    },
                                   ),
-                                  onTap: ()async{
-                                    ADDRESSES.remove(e.toString());
-                                    var result = await Update_Address();
-                                    // Show_Snackbar(context: context,message: ADDRESSES.toString());
-                                  },
-                                ),
-                              )
-                            ],
+                                )
+                              ],
+                            ),
                           )
                         ],
                       ),

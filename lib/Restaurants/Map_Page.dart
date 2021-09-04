@@ -33,17 +33,22 @@ class _Find_Address_From_MapState extends State<Find_Address_From_Map> {
 
   Save_data()async{
     var label = _value=="Custom label" ? Label_Field_Controller.text : _value;
-
+    int randint = Random().nextInt(2000000);
+    while(ADDRESSES.containsKey("Address-"+randint.toString())){
+      randint = Random().nextInt(2000000);
+    }
     String addres = address!=null? (address!.streetAddress.toString()+", "+address!.region.toString()+", "+address!.countryName.toString()+", "+address!.postal.toString() ).split(" ").map((str) => str.toString()[0].toUpperCase()+str.toString().substring(1)).join(" ") : "";
     // Map mape = {"Address-"+(ADDRESSES.length+1).toString() : {"Address Type": label,"GeoPoint": GeoPoint(28.9122326, 75.6090934),"Address":addres,},};
-    ADDRESSES["Address-"+(Random().nextInt(2000000)).toString()] = {"Address Type": label,"GeoPoint": GeoPoint(latitude, longitude),"Address":addres,};
+    ADDRESSES["Address-"+randint.toString()] = {"Address Type": label,"GeoPoint": GeoPoint(latitude, longitude),"Address":addres,};
     // Show_Snackbar(context: context, message: mape.toString(), duration: Duration(seconds: 5));
     Update_Address();
     setState(() {
+      Label_Field_Controller.text = "";
       _value = "Choose";
-      _FormKey.currentState!.reset();
     });
+    _FormKey.currentState!.reset();
     Show_Snackbar(context: context, message: "Address Saved");
+    print("Address saved....");
     Future.delayed(Duration(seconds: 2), ()=>Navigator.pop(context));
   }
 
@@ -60,7 +65,7 @@ class _Find_Address_From_MapState extends State<Find_Address_From_Map> {
   GoogleMapController? newGoogleMapController;
 
   CameraPosition initPlace = CameraPosition(
-    target: LatLng(28.9122326, 75.6090934),
+    target: LatLng(28.9092326, 75.6074934),
     zoom: 16,
   );
 
@@ -84,23 +89,22 @@ class _Find_Address_From_MapState extends State<Find_Address_From_Map> {
 
     _locationData = await location.getLocation();
 
-    latitude = _locationData!.latitude;
-    longitude = _locationData!.longitude;
 
-    // final coordinates = new Coordinates(1.10, 45.50);
-    var Address = await geoCode.reverseGeocoding(latitude: _locationData!.latitude as double, longitude: _locationData!.longitude as double);
-
-
-    setState(() {
-      address = Address;
-      initPlace = CameraPosition(
-        target: LatLng(_locationData!.latitude!, _locationData!.longitude!),
-        zoom: 18,
-      );
-      newGoogleMapController!.animateCamera(CameraUpdate.newCameraPosition(initPlace));
+    location.onLocationChanged.listen((LocationData currentLocation) {
+      setState(() async {
+        // address = Address;
+        initPlace = CameraPosition(
+          target: LatLng(_locationData!.latitude!, _locationData!.longitude!),
+          zoom: 18,
+        );
+        newGoogleMapController!.animateCamera(CameraUpdate.newCameraPosition(initPlace));
+        latitude = _locationData!.latitude;
+        longitude = _locationData!.longitude;
+        address = await geoCode.reverseGeocoding(latitude: _locationData!.latitude as double, longitude: _locationData!.longitude as double);
+      });
     });
-
   }
+
 
   SetMarker(lat,lng) async{
 
@@ -160,7 +164,6 @@ class _Find_Address_From_MapState extends State<Find_Address_From_Map> {
 
   @override
   Widget build(BuildContext context) {
-    checkPermissionsAndFetchLocation();
     var Device_height = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
@@ -202,7 +205,7 @@ class _Find_Address_From_MapState extends State<Find_Address_From_Map> {
               //     child: CircularProgressIndicator(),
               //   );
               // }
-              // checkPermissionsAndFetchLocation();
+              checkPermissionsAndFetchLocation();
               return GestureDetector(
                 onTap: (){
                   FocusScope.of(context).requestFocus(new FocusNode());
@@ -239,7 +242,7 @@ class _Find_Address_From_MapState extends State<Find_Address_From_Map> {
                         markerId: MarkerId('atpl'),
                         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
                         onTap: (){},
-                        position: LatLng(_locationData!=null ? latitude as double : 28.9122326, _locationData!=null? longitude as double : 75.6090934),
+                        position: LatLng(_locationData!=null ? latitude??28.9092326 as double : 28.9092326, _locationData!=null? longitude??75.6074934 as double : 75.6074934),
                         // position: _locationData!=null? LatLng(_locationData!.latitude!, _locationData!.longitude!): LatLng(30.9024779, 75.8201934),
                         infoWindow: InfoWindow(
                           title: address!=null? address!.streetAddress.toString()+", "+address!.region.toString() : "",
@@ -259,7 +262,7 @@ class _Find_Address_From_MapState extends State<Find_Address_From_Map> {
                         padding: const EdgeInsets.only(bottom: 20.0,right: 20,left: 20),
                         child: AnimatedContainer(
                           // width: MediaQuery.of(context).size.width-MediaQuery.of(context).size.width/7,
-                          height: Minimize ? 40 : 230,
+                          height: Minimize ? 40 : 233,
                           duration: Duration(milliseconds: 400),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
@@ -441,9 +444,12 @@ class _Find_Address_From_MapState extends State<Find_Address_From_Map> {
                                                     )
                                                   ),
                                                   onPressed: (){
-                                                    if (_FormKey.currentState!.validate() && latitude!=null && longitude!=null) {
+                                                    if (_FormKey.currentState!.validate() && latitude!=null && longitude!=null && address!=null && _value!="Choose") {
                                                       Save_data();
-                                                    };
+                                                    }
+                                                    else{
+                                                      Show_Snackbar(context: context, message: "Something Went Wrong! Please Try Again");
+                                                    }
                                                   },
                                                   child: Text("Save Address")
                                                 ),
@@ -540,7 +546,7 @@ class _CustomsState extends State<Customs> {
         SizedBox(height: 7,),
         TextFormField(
           keyboardType: TextInputType.text,
-          // controller: Discount_Field_Controller,
+          controller: Label_Field_Controller,
           // // autovalidateMode: _value==0?AutovalidateMode.disabled:AutovalidateMode.onUserInteraction,
           // inputFormatters: [
           //   FilteringTextInputFormatter.deny("-"),
