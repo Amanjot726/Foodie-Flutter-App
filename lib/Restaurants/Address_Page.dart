@@ -5,7 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AddressPage extends StatelessWidget {
-  const AddressPage({Key? key}) : super(key: key);
+  int Option;
+  AddressPage({Key? key, required this.Option}) : super(key: key);
 
   Fetch_User_Addresses() {
     Stream<DocumentSnapshot<Map<String,dynamic>>> stream = USERS_COLLECTION.doc(get_Uid()).snapshots();
@@ -25,7 +26,7 @@ class AddressPage extends StatelessWidget {
                 child: Image.asset("assets/address.png",width: 36,)
               ),
               SizedBox(width: 8,),
-              Text("Addresses",
+              Text(Option==0 ? "Addresses" : "Select Address",
                 style: TextStyle(
                     color: Color.fromARGB(185, 0, 0, 0),
                     fontFamily: 'AlfaSlabOne',
@@ -136,86 +137,93 @@ class AddressPage extends StatelessWidget {
                         // border: Border.all(color: Color.fromARGB(15, 0, 0, 0),width: 2),
                         border: Border.all(color: Color.fromARGB(23, 0, 0, 0), width: 2),
                       ),
-                      child: Row(
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  border: Border(right: BorderSide(color: Color.fromARGB(10, 0, 0, 0), style: BorderStyle.solid, width: 2))
-                                ),
-                                width: 72,
-                                height: 72,
-                                child: Image.asset(
-                                  Addresses![e]['Address Type']=="Home"?"assets/Home_location.png":Addresses[e]['Address Type']=="Work"?"assets/Work_location.png":"assets/map.png",
-                                  width: 36,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Expanded(
-                            flex: 36,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    Addresses[e]['Address Type'],
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontFamily: "Roboto",
-                                      fontWeight: FontWeight.bold,
-                                      // color: Color.fromARGB(154, 0, 0, 0),
-                                      color: Color.fromARGB(176, 0, 0, 0),
-                                    ),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(13),
+                        onTap: Option==1 ?(){
+                          Navigator.pop(context, [Addresses![e]['Address Type'],Addresses[e]['Address']]);
+                        }:null,
+                        child: Row(
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    border: Border(right: BorderSide(color: Color.fromARGB(10, 0, 0, 0), style: BorderStyle.solid, width: 2))
                                   ),
-                                  SizedBox(height: 4,),
-                                  Text(
-                                    Addresses[e]['Address'],
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontFamily: "Roboto",
-                                      // color: Color.fromARGB(154, 0, 0, 0),
-                                      color: Color.fromARGB(176, 0, 0, 0),
+                                  width: 72,
+                                  height: 72,
+                                  child: Image.asset(
+                                    Addresses![e]['Address Type']=="Home"?"assets/Home_location.png":Addresses[e]['Address Type']=="Work"?"assets/Work_location.png":"assets/map.png",
+                                    width: 36,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Expanded(
+                              flex: 36,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      Addresses[e]['Address Type'],
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontFamily: "Roboto",
+                                        fontWeight: FontWeight.bold,
+                                        // color: Color.fromARGB(154, 0, 0, 0),
+                                        color: Color.fromARGB(176, 0, 0, 0),
+                                      ),
+                                    ),
+                                    SizedBox(height: 4,),
+                                    Text(
+                                      Addresses[e]['Address'],
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: "Roboto",
+                                        // color: Color.fromARGB(154, 0, 0, 0),
+                                        color: Color.fromARGB(176, 0, 0, 0),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ),
+                            Spacer(),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(7),
+                                    child: InkWell(
+                                      borderRadius: BorderRadius.circular(50),
+                                      child: Container(
+                                        padding: EdgeInsets.all(10),
+                                        child: Icon(
+                                          Option==0 ? Icons.delete_forever_rounded : Icons.arrow_forward_ios_rounded,
+                                          color: Option==0 ? Colors.red[700] : Colors.black54,
+                                          size: Option==0 ? null : 18,
+                                        ),
+                                      ),
+                                      onTap: Option==0 ? ()async{
+                                        ADDRESSES.remove(e.toString());
+                                        var result = await Update_Address();
+                                        // Show_Snackbar(context: context,message: ADDRESSES.toString());
+                                      }:null,
                                     ),
                                   )
                                 ],
                               ),
                             )
-                          ),
-                          Spacer(),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(7),
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(50),
-                                    child: Container(
-                                      padding: EdgeInsets.all(10),
-                                      child: Icon(
-                                        Icons.delete_forever_rounded,
-                                        color: Colors.red[700],
-                                      ),
-                                    ),
-                                    onTap: ()async{
-                                      ADDRESSES.remove(e.toString());
-                                      var result = await Update_Address();
-                                      // Show_Snackbar(context: context,message: ADDRESSES.toString());
-                                    },
-                                  ),
-                                )
-                              ],
-                            ),
-                          )
-                        ],
+                          ],
+                        ),
                       ),
                     )
                   );

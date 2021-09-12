@@ -56,10 +56,6 @@ class User_Profile extends StatelessWidget {
 
   var index = 1;
 
-  Color primaryColor = Colors.green;
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +78,7 @@ class User_Profile extends StatelessWidget {
             ),
           ],
         ),
-        backgroundColor: primaryColor,
+        backgroundColor: PRIMARY_COLOR,
         actions: [
           IconButton(
             onPressed: (){
@@ -138,7 +134,7 @@ class User_Profile extends StatelessWidget {
           currentIndex: index,
           selectedFontSize: 12,
           selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-          selectedItemColor: primaryColor,
+          selectedItemColor: PRIMARY_COLOR,
           onTap: (idx) {
             index!=idx ? Navigator.pushReplacementNamed(context, navigation_List[idx]) :
             index = idx;
@@ -207,195 +203,99 @@ class User_Profile extends StatelessWidget {
               child: Column(
                 children:[
                   Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
-                          children: [
-                            Row(
-                                children:[
-                                  Text("Orders",
-                                    style: TextStyle(
-                                        color: Color.fromARGB(171, 13, 97, 57),
-                                        fontFamily: 'Roboto',
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16.0
-                                    ),
-                                  )
-                                ]
-                            ),
-                            SizedBox(height: 20,),
-                            Row(
-                              children: [
-                                Text("23",
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [
+                          Row(
+                              children:[
+                                Text("Orders",
                                   style: TextStyle(
                                       color: Color.fromARGB(171, 13, 97, 57),
                                       fontFamily: 'Roboto',
-                                      fontSize: 15.2
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16.0
                                   ),
                                 )
-                              ],
-                            )
-                          ],
-                        ),
-                        Spacer(),
-                        Column(
-                          children: [
-                            Row(
-                                children:[
-                                  Text("Favorites",
-                                    style: TextStyle(
-                                        color: Color.fromARGB(171, 13, 97, 57),
-                                        fontFamily: 'Roboto',
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16.0
-                                    ),
-                                  )
-                                ]
-                            ),
-                            SizedBox(height: 20,),
-                            Row(
-                              children: [
-                                Text("82",
+                              ]
+                          ),
+                          SizedBox(height: 20,),
+                          Row(
+                            children: [
+                              Text("23",
+                                style: TextStyle(
+                                    color: Color.fromARGB(171, 13, 97, 57),
+                                    fontFamily: 'Roboto',
+                                    fontSize: 15.2
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                      Spacer(),
+                      Column(
+                        children: [
+                          Row(
+                              children:[
+                                Text("Favorites",
                                   style: TextStyle(
                                       color: Color.fromARGB(171, 13, 97, 57),
                                       fontFamily: 'Roboto',
-                                      fontSize: 15.2
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16.0
                                   ),
                                 )
-                              ],
-                            )
-                          ],
-                        ),
-                        Spacer(),
-                        Column(
-                          children: [
-                            Row(
-                                children:[
-                                  Text("Saved",
-                                    style: TextStyle(
-                                        color: Color.fromARGB(171, 13, 97, 57),
-                                        fontFamily: 'Roboto',
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16.0
-                                    ),
-                                  )
-                                ]
-                            ),
-                            SizedBox(height: 20,),
-                            Row(
-                              children: [
-                                Text("134",
+                              ]
+                          ),
+                          SizedBox(height: 20,),
+                          Row(
+                            children: [
+                              Text("82",
+                                style: TextStyle(
+                                    color: Color.fromARGB(171, 13, 97, 57),
+                                    fontFamily: 'Roboto',
+                                    fontSize: 15.2
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                      Spacer(),
+                      Column(
+                        children: [
+                          Row(
+                              children:[
+                                Text("Saved",
                                   style: TextStyle(
                                       color: Color.fromARGB(171, 13, 97, 57),
                                       fontFamily: 'Roboto',
-                                      fontSize: 15.2
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16.0
                                   ),
                                 )
-                              ],
-                            )
-                          ],
-                        ),
-
-                      ]
+                              ]
+                          ),
+                          SizedBox(height: 20,),
+                          Row(
+                            children: [
+                              Text("134",
+                                style: TextStyle(
+                                    color: Color.fromARGB(171, 13, 97, 57),
+                                    fontFamily: 'Roboto',
+                                    fontSize: 15.2
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ]
                   ),
-                  // SizedBox(height: 40,),
-                  // Row(
-                  //     mainAxisAlignment: MainAxisAlignment.center,
-                  //     children: [
-                  //       InkWell(
-                  //         borderRadius: BorderRadius.circular(20),
-                  //         splashColor: Colors.black38,
-                  //         onTap: (){},
-                  //         child: Container(
-                  //           width: 120,
-                  //           padding: EdgeInsets.all(10),
-                  //           decoration: BoxDecoration(
-                  //             borderRadius: BorderRadius.circular(20),
-                  //             color: Color.fromARGB(136, 19, 181, 103),
-                  //             boxShadow: [
-                  //               BoxShadow(
-                  //                 color: Color.fromARGB(124, 31, 159, 98),
-                  //                 blurRadius: 6.0,
-                  //                 spreadRadius: 2.0,
-                  //               ),
-                  //             ]
-                  //           ),
-                  //           child: Text(
-                  //             "See More",
-                  //             textAlign: TextAlign.center,
-                  //             style: TextStyle(
-                  //               color: Color.fromARGB(191, 2, 65, 35),
-                  //               fontFamily: 'Roboto',
-                  //               fontSize: 15.5
-                  //             ),
-                  //           )
-                  //         )
-                  //       ),
-                  //     ]
-                  // ),
                 ],
               ),
             ),
-            // (get_user_data==null)? Container() :
-            //   (get_user_data!.isAdmin != true) ? Container() :
-            //     Column(
-            //       children: [
-            //         Row(
-            //           mainAxisAlignment: MainAxisAlignment.center,
-            //           children: [
-            //             SingleChildScrollView(
-            //               child: Container(
-            //                 padding: EdgeInsets.symmetric(horizontal: 25,vertical: 10),
-            //                 child: Column(
-            //                   children: [
-            //                     ElevatedButton(
-            //                       style: ElevatedButton.styleFrom(
-            //                           padding: EdgeInsets.symmetric(vertical: 11,horizontal: 64),
-            //                           primary: Color.fromARGB(203, 69, 205, 137),
-            //                           shape: RoundedRectangleBorder(
-            //                             borderRadius: BorderRadius.circular(12),
-            //                           )
-            //                       ),
-            //                       child: Text("Add Restaurants",
-            //                         style: TextStyle(
-            //                           fontFamily: 'Roboto',
-            //                           fontSize: 15.5,
-            //                           color: Color.fromARGB(191, 2, 65, 35),
-            //                         ),
-            //                       ),
-            //                       onPressed: (){
-            //                         Navigator.push(context, MaterialPageRoute(builder: (context)=> Add_Restaurant_Page()));
-            //                       },
-            //                     ),
-            //                     SizedBox(height: 15,),
-            //                     ElevatedButton(
-            //                       style: ElevatedButton.styleFrom(
-            //                           padding: EdgeInsets.symmetric(vertical: 11,horizontal: 35),
-            //                           primary: Color.fromARGB(203, 69, 205, 137),
-            //                           shape: RoundedRectangleBorder(
-            //                             borderRadius: BorderRadius.circular(12),
-            //                           )
-            //                       ),
-            //                       child: Text("Add Dishes to Restaurants",
-            //                         style: TextStyle(
-            //                           fontFamily: 'Roboto',
-            //                           fontSize: 15.5,
-            //                           color: Color.fromARGB(191, 2, 65, 35),
-            //                         ),
-            //                       ),
-            //                       onPressed: (){
-            //                         Navigator.push(context, MaterialPageRoute(builder: (context)=> Select_Restaurant()));
-            //                       },
-            //                     ),
-            //                   ],
-            //                 ),
-            //               ),
-            //             ),
-            //           ],
-            //         ),
-            //       ],
-            //     ),
-            // SizedBox(height: 10,),
             Container(
               child: Padding(
                 padding: const EdgeInsets.all(30.0),
@@ -423,7 +323,7 @@ class User_Profile extends StatelessWidget {
 
                         },
                       ),
-                      Divider(height: 1,indent: 5,endIndent: 5,thickness: 1,color: Color.fromARGB(20, 49, 49, 49),),
+                      Divider(height: 1,indent: 10,endIndent: 10,thickness: 1,color: Color.fromARGB(20, 49, 49, 49),),
                       ListTile(
                         leading: Padding(
                           padding: const EdgeInsets.only(top: 4,left: 1),
@@ -437,7 +337,7 @@ class User_Profile extends StatelessWidget {
 
                         },
                       ),
-                      Divider(height: 1,indent: 5,endIndent: 5,thickness: 1,color: Color.fromARGB(20, 49, 49, 49),),
+                      Divider(height: 1,indent: 10,endIndent: 10,thickness: 1,color: Color.fromARGB(20, 49, 49, 49),),
                       ListTile(
                         // visualDensity: VisualDensity.comfortable,
                         leading: Padding(
@@ -456,7 +356,7 @@ class User_Profile extends StatelessWidget {
                         (get_user_data!.isAdmin != true) ? Container() :
                         Column(
                           children: [
-                            Divider(height: 1,indent: 5,endIndent: 5,thickness: 1,color: Color.fromARGB(20, 49, 49, 49),),
+                            Divider(height: 1,indent: 10,endIndent: 10,thickness: 1,color: Color.fromARGB(20, 49, 49, 49),),
                             ListTile(
                               // visualDensity: VisualDensity.comfortable,
                               leading: Padding(
@@ -471,7 +371,7 @@ class User_Profile extends StatelessWidget {
                                 Navigator.pushNamed(context, "/add_restaurant");
                               },
                             ),
-                            Divider(height: 1,indent: 5,endIndent: 5,thickness: 1,color: Color.fromARGB(20, 49, 49, 49),),
+                            Divider(height: 1,indent: 10,endIndent: 10,thickness: 1,color: Color.fromARGB(20, 49, 49, 49),),
                             ListTile(
                               // visualDensity: VisualDensity.comfortable,
                               leading: Padding(
@@ -488,7 +388,7 @@ class User_Profile extends StatelessWidget {
                             ),
                           ],
                         ),
-                      Divider(height: 1,indent: 5,endIndent: 5,thickness: 1,color: Color.fromARGB(20, 49, 49, 49),),
+                      Divider(height: 1,indent: 10,endIndent: 10,thickness: 1,color: Color.fromARGB(20, 49, 49, 49),),
                       ListTile(
                         leading: Padding(
                           padding: const EdgeInsets.only(top: 4),
@@ -502,7 +402,7 @@ class User_Profile extends StatelessWidget {
                           Navigator.pushNamed(context, "/Manage_Delivery");
                         },
                       ),
-                      Divider(height: 1,indent: 5,endIndent: 5,thickness: 1,color: Color.fromARGB(20, 49, 49, 49),),
+                      Divider(height: 1,indent: 10,endIndent: 10,thickness: 1,color: Color.fromARGB(20, 49, 49, 49),),
                       ListTile(
                         leading: Padding(
                           padding: const EdgeInsets.only(top: 4,left: 2),
@@ -522,7 +422,7 @@ class User_Profile extends StatelessWidget {
 
                         },
                       ),
-                      Divider(height: 1,indent: 5,endIndent: 5,thickness: 1,color: Color.fromARGB(20, 49, 49, 49),),
+                      Divider(height: 1,indent: 10,endIndent: 10,thickness: 1,color: Color.fromARGB(20, 49, 49, 49),),
                       ListTile(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.vertical(bottom: Radius.circular(18.5)),
@@ -549,8 +449,8 @@ class User_Profile extends StatelessWidget {
                 ),
               ),
             ),
-              ],
-            ),
+          ],
+        ),
       ),
     );
   }
@@ -597,7 +497,7 @@ class _ProfilePicState extends State<ProfilePic> {
               ),
               padding: EdgeInsets.all(6),
               onPressed: ()async {
-                file = await Image_Picker.pickImage(source: ImageSource.camera);
+                file = await Image_Picker.pickImage(source: ImageSource.camera,preferredCameraDevice: CameraDevice.rear,maxHeight: 480,maxWidth: 640,imageQuality: 50);
                 Navigator.pop(dialogContext);
               },
             ),
@@ -644,7 +544,9 @@ class _ProfilePicState extends State<ProfilePic> {
           borderRadius: BorderRadius.circular(100),
           onTap: () async {
             await _show_Dialog_Box(context);
+            print("File Path1 = ${file!.path}");
             if (file != null){
+              print("File Path2 = ${file!.path}");
               var url = await UploadImage(File(file!.path));
               setState((){
                 get_user_data!.Profile_pic = url;

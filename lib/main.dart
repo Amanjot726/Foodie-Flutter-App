@@ -2,6 +2,8 @@
 // import 'package:first_app/News_api.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:first_app/DB/DB_Operations.dart';
+import 'package:first_app/Restaurants/Acknowledge.dart';
 import 'package:first_app/Restaurants/Manage_Delivery.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -30,6 +32,7 @@ import 'package:first_app/Home/Settings_Page.dart';
 import 'package:first_app/Practice/data-passing.dart';
 import 'package:first_app/Auth/Login-Page.dart';
 import 'package:first_app/Restaurants/home_page.dart' as Restaurant;
+import 'package:provider/provider.dart';
 
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -54,7 +57,15 @@ Future<void> main() async{
 
   // to execute the app created by us
   // MyApp -> Object
-  runApp(MyApp());
+  runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) => DataProvider(),)
+        ],
+        child: MyApp()
+      )
+  );
 }
 
 
@@ -150,10 +161,11 @@ class _MyAppState extends State<MyApp> {
         "/profile": (context) => User_Profile(),
         "/add_restaurant": (context) => Add_Restaurant_Page(),
         "/cart": (context) => Cart_Page(),
-        "/Addresses": (context) => AddressPage(),
+        "/Addresses": (context) => AddressPage(Option: 0,),
         "/fetch_location": (context) => FetchCurrentLocationPage(),
         "/Address_Google_Map": (context) => Find_Address_From_Map(),
         "/Manage_Delivery": (context) => ManageDeliveryPage(),
+        "/Ack": (context) => Show_Acknowledgement(),
       },
       initialRoute: "/",
       // initialRoute: "/fetch_location",

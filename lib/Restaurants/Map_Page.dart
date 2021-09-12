@@ -69,8 +69,7 @@ class _Find_Address_From_MapState extends State<Find_Address_From_Map> {
     zoom: 16,
   );
 
-  checkPermissionsAndFetchLocation() async{
-
+  checkPermissionsAndFetchLocation() async {
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled!) {
       _serviceEnabled = await location.requestService();
@@ -88,8 +87,6 @@ class _Find_Address_From_MapState extends State<Find_Address_From_Map> {
     }
 
     _locationData = await location.getLocation();
-
-
     location.onLocationChanged.listen((LocationData currentLocation) {
       setState(() async {
         // address = Address;
@@ -104,6 +101,9 @@ class _Find_Address_From_MapState extends State<Find_Address_From_Map> {
       });
     });
   }
+
+  // FetchLocation() async{
+  // }
 
 
   SetMarker(lat,lng) async{
@@ -226,9 +226,6 @@ class _Find_Address_From_MapState extends State<Find_Address_From_Map> {
                       rotateGesturesEnabled: true,
                       mapToolbarEnabled: false,
                       onMapCreated: (GoogleMapController controller) {
-                        setState(() {
-                          checkPermissionsAndFetchLocation();
-                        });
                         _controller.complete(controller);
                         newGoogleMapController = controller;
                       },
@@ -299,9 +296,9 @@ class _Find_Address_From_MapState extends State<Find_Address_From_Map> {
                                                   if(yPosition<0.0){
                                                     yPosition = 0;
                                                   }
-                                                  // else if(yPosition > Device_height / (Device_height<650 ? 2.2 : 1.68)){
-                                                  //   yPosition = Device_height / (Device_height<650 ? 2.2 : 1.68);
-                                                  // }
+                                                  else if(yPosition > Device_height-350){
+                                                    yPosition = Device_height-350;
+                                                  }
                                                   else{
                                                     yPosition += -tapInfo.globalPosition.dy;
                                                   }
@@ -313,9 +310,9 @@ class _Find_Address_From_MapState extends State<Find_Address_From_Map> {
                                                   if(yPosition<0.0){
                                                     yPosition = 0;
                                                   }
-                                                  // else if(yPosition > Device_height / (Device_height<650 ? 2.2 : 1.68)){
-                                                  //   yPosition = Device_height / (Device_height<650 ? 2.2 : 1.68);
-                                                  // }
+                                                  else if(yPosition > Device_height-350){
+                                                    yPosition = Device_height-350;
+                                                  }
                                                   else{
                                                     yPosition += -tapInfo.delta.dy;
                                                   }
@@ -328,9 +325,9 @@ class _Find_Address_From_MapState extends State<Find_Address_From_Map> {
                                                   if(yPosition<0.0){
                                                     yPosition = 0;
                                                   }
-                                                  // else if(yPosition > Device_height / (Device_height<650 ? 2.2 : 1.68)){
-                                                  //   yPosition = Device_height / (Device_height<650 ? 2.2 : 1.68);
-                                                  // }
+                                                  else if(yPosition > Device_height-350){
+                                                    yPosition = Device_height-350;
+                                                  }
                                                   else{
                                                     yPosition += -tapInfo.localPosition.dy;
                                                   }
@@ -343,21 +340,21 @@ class _Find_Address_From_MapState extends State<Find_Address_From_Map> {
                                                   if(yPosition<0.0){
                                                     yPosition = 0;
                                                   }
-                                                  // else if(yPosition > Device_height / (Device_height<650 ? 2.2 : 1.68)){
-                                                  //   yPosition = Device_height / (Device_height<650 ? 2.2 : 1.68);
-                                                  // }
+                                                  else if(yPosition > Device_height-350){
+                                                    yPosition = Device_height-350;
+                                                  }
                                                   else{
                                                     yPosition += -tapInfo.delta.dy;
                                                   }
                                                 });
                                               },
-                                              onTap: () {
-                                              },
+                                              // onTap: () {
+                                              // },
                                               // onPanEnd: (tapInfo) {
-                                              //   Show_Snackbar(context: context,message: yPosition.toString()+", hieght = "+(MediaQuery.of(context).size.height/1.68).toString(),duration: Duration(milliseconds: 800));
+                                              //   Show_Snackbar(context: context,message: yPosition.toString()+", hieght = "+(MediaQuery.of(context).size.height-350).toString(),duration: Duration(milliseconds: 800));
                                               // },
                                               // onVerticalDragEnd: (tapInfo) {
-                                              //   Show_Snackbar(context: context,message: yPosition.toString(),duration: Duration(milliseconds: 100));
+                                              //   Show_Snackbar(context: context,message: yPosition.toString()+", hieght = "+(MediaQuery.of(context).size.height-350).toString(),duration: Duration(milliseconds: 800));
                                               // },
                                               child: SizedBox(
                                                 width: 130,

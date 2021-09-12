@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:first_app/Restaurants/add_dishes.dart';
+import 'package:first_app/Restaurants/add_restaurants.dart';
 import 'package:first_app/util/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -101,6 +102,7 @@ class _Dishes_PageState extends State<Dishes_Page> {
                     padding: EdgeInsets.all(20),
                     children: snapshot.data!.docs.map<Widget>((DocumentSnapshot document) {
                       Map<String, dynamic> map = document.data()! as Map<String, dynamic>;
+                      snapshot.data!=null || map.isNotEmpty && CART.isNotEmpty ? CART = map['quantity'] = CART : "";
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 20),
                         child: Container(
@@ -360,6 +362,26 @@ class _CounterState extends State<Counter> {
     return StreamBuilder(
         stream: fetch_Dish_count(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
+          // if (snapshot.hasError) {
+          //   return Center(
+          //     child: Text(
+          //       "SOMETHING WENT WRONG!!!",
+          //       style: TextStyle(color: Colors.red[200]),
+          //     ),
+          //   );
+          // }
+          // if (snapshot.connectionState == ConnectionState.waiting) {
+          //   return Center(
+          //     // child: CircularProgressIndicator(),
+          //   );
+          // }
+          // // print("data = "+snapshot.data.docs);
+          // var map = snapshot.data!;
+          // Map<String, dynamic> cart = map['cart']??{} as Map<String, dynamic>;
+          // // print("data = "+snapshot.data.docs);
+          // snapshot.data!=null || cart.isNotEmpty && CART.isNotEmpty ? CART = cart : "";
+          // (CART[widget.dish_id] != null || CART[widget.dish_id] != 0 || CART[widget.dish_id]['quantity'] != null || CART[widget.dish_id]['quantity'] != 0) ? CART = data_map : "";
+          // Map? Addresses;
         return Container(
           decoration: BoxDecoration(shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(10), border: Border.all(color: Colors.black)),
           child: (CART[widget.dish_id] == null || CART[widget.dish_id] == 0 || CART[widget.dish_id]['quantity'] == null || CART[widget.dish_id]['quantity'] == 0) ?

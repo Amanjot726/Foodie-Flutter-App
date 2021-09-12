@@ -1,7 +1,6 @@
 import 'package:first_app/util/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class RazorPayPaymentPage extends StatefulWidget {
 
@@ -29,23 +28,37 @@ class _RazorPayPaymentPageState extends State<RazorPayPaymentPage> {
   void openCheckout() async {
     var options = {
       'key': 'rzp_test_1DP5mmOlF5G5ag',
-      'amount': widget.amount,
+      'amount': double.parse(widget.amount.toString().split(".").join("")+".0"),
+      'currency' : 'INR',
       'name': 'Foodie',
       'description': 'Food Order',
-      'prefill': {'contact': await get_Uid().toString(), 'email': get_user_data!.email.toString()},
+      "image": "https://image.flaticon.com/icons/png/512/4521/4521016.png",
+      'prefill': {
+        "name": get_user_data!.name.toString(),
+        // 'contact': get_user_data!.name.toString(),
+        'email': get_user_data!.email.toString()
+      },
       'external': {
         'wallets': ['paytm']
+      },
+      "theme": {
+        // "color": "#3CD441"
+        // "color": "#2BC631"
+        "color": "#21BA27",
       }
+
     };
 
     try {
       _razorpay.open(options);
+      print("Amount = ${double.parse(widget.amount.toString().split(".").join("")+".0")}");
     } catch (e) {
       debugPrint('Error: e');
     }
   }
 
   void onPaymentSuccess(PaymentSuccessResponse response) {
+    print(response.paymentId);
     // Navigate the User to a Successful Page
     Navigator.pop(context, 1);
   }
@@ -60,6 +73,7 @@ class _RazorPayPaymentPageState extends State<RazorPayPaymentPage> {
 
   @override
   Widget build(BuildContext context) {
+
 
     openCheckout();
 
