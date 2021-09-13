@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -49,6 +51,15 @@ Add_Address_Field() async{
 get_Uid(){
   return FirebaseAuth.instance.currentUser!= null ? FirebaseAuth.instance.currentUser!.uid : "";
 }
+
+const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+Random _rnd = Random();
+
+String getRandomString(int length) => String.fromCharCodes(
+    Iterable.generate(
+      length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))
+    )
+);
 
 Future get_data() async {
   var data_snapshot = await FirebaseFirestore.instance.collection("users").doc(await get_Uid()).get();

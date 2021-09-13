@@ -419,6 +419,7 @@ class Cart_Page extends StatelessWidget {
               );
             }
             total = 0;
+            Dishes.clear();
             var map = snapshot.data!;
             Map<String, dynamic> cart = map['cart']??{} as Map<String, dynamic>;
             // print("data = "+snapshot.data.docs);
