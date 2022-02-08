@@ -35,7 +35,7 @@ samples, guidance on mobile development, and a full API reference.
 
 - 8GB RAM
 
-- i3/i5 Processor
+- i3/i5 Processor or More
 
 ## Website for practice
 
